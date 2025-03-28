@@ -13,7 +13,3 @@ WORKDIR /app
 COPY --from=build /app/target/*.war app.war
 
 ENTRYPOINT ["java","-jar","app.war"]
-#FROM openjdk:17-ea-oracle
-#ARG WAR_FILE=target/*.war
-#COPY ${WAR_FILE} app.war
-#ENTRYPOINT ["java","-jar","/app.war"]

@@ -37,13 +37,16 @@ public enum ExceptionVariable {
     UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
 
     APARTMENT_NOT_FOUND(404, "Apartment not found", HttpStatus.NOT_FOUND),
+    APARTMENT_NAME_NOT_NULL_OR_EMPTY(400, "Apartment name is not null or empty", HttpStatus.BAD_REQUEST),
 
     MONTHLY_INVOICE_NOT_FOUND(404, "Monthly invoice not found", HttpStatus.NOT_FOUND),
 
     ELECTRIC_WATER_NOT_FOUND(404, "Electric water not found", HttpStatus.NOT_FOUND),
 
     CODE_NOT_NULL_OR_EMPTY(400, "Code is not null or empty", HttpStatus.BAD_REQUEST),
-    CODE_INVALID(400, "Code is invalid", HttpStatus.BAD_REQUEST );
+    CODE_INVALID(400, "Code is invalid", HttpStatus.BAD_REQUEST ),
+
+    BUILDING_NOT_FOUND(404, "Building not found", HttpStatus.NOT_FOUND),;
 
     private final Integer code;
     private final String message;

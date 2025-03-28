@@ -99,7 +99,7 @@ public class UserServiceImpl implements IUserService {
         String accessToken = Objects.requireNonNull(webClient.method(HttpMethod.POST)
                         .uri(accessTokenUrl)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .bodyValue(BodyInserters.fromFormData(properties))
+                        .body(BodyInserters.fromFormData(properties))
                         .retrieve()
                         .bodyToMono(Map.class)
                         .block())

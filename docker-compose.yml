@@ -1,6 +1,7 @@
 services:
     postgres:
         image: postgres:17.3
+        container_name: buildingmanager_postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: 123
@@ -9,18 +10,20 @@ services:
         ports:
             - "5433:5432"
     redis:
-        image: "redis:latest"
+        image: redis:latest
+        container_name: buildingmanager_redis
         restart: always
         ports:
             - "6379:6379"
     backend:
-        image: nguyentienminh0710/buildingmanager:0.0.4
+        image: nguyentienminh0710/buildingmanager:0.0.5
+        container_name: buildingmanager_be
         restart: always
         env_file: ".env"
         environment:
             postgres_host: postgres
             postgres_port: 5432
             redis_port: 6379
-            redis_host: redis
+            redis_host: buildingmanager_redis
         ports:
             - "8080:8080"

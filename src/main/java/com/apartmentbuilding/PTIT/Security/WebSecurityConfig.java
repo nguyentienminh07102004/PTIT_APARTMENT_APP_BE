@@ -63,6 +63,12 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/%s/electrics/apartment/{apartmentId}".formatted(apiPrefix))
                     .access(new WebExpressionAuthorizationManager("not isAnonymous()"))
 
+                .requestMatchers(HttpMethod.POST, "/%s/apartments/".formatted(apiPrefix)).hasRole(ConstantConfig.ADMIN_ROLE)
+
+                .requestMatchers("/%s/reports/**".formatted(apiPrefix)).permitAll()
+
+                .requestMatchers("/%s/ai**".formatted(apiPrefix)).permitAll()
+
                 .requestMatchers("/ws**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());

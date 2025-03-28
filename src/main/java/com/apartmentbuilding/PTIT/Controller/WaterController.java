@@ -2,6 +2,7 @@ package com.apartmentbuilding.PTIT.Controller;
 
 import com.apartmentbuilding.PTIT.DTO.Reponse.APIResponse;
 import com.apartmentbuilding.PTIT.DTO.Reponse.ElectricInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Reponse.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.Service.ElectricWater.IElectricWaterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
@@ -20,26 +21,26 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/${api_prefix}/electrics")
-public class ElectricController {
+@RequestMapping(value = "/${api_prefix}/waters")
+public class WaterController {
     private final IElectricWaterService electricWaterService;
 
     @PostMapping(value = "/")
     public ResponseEntity<APIResponse> uploadFileExcel(@RequestPart MultipartFile file) {
-        List<ElectricInvoiceResponse> result = electricWaterService.saveAllElectricInvoice(file);
+        List<WaterInvoiceResponse> waterInvoiceResponses = electricWaterService.saveAllWaterInvoice(file);
         APIResponse response = APIResponse.builder()
                 .code(HttpStatus.CREATED.value())
                 .message("SUCCESS")
-                .data(result)
+                .data(waterInvoiceResponses)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping(value = "/apartment/{apartmentId}")
-    public ResponseEntity<APIResponse> findElectricBillByApartmentId(@PathVariable String apartmentId,
-                                                                     @RequestParam(required = false, defaultValue = "1") Integer page,
-                                                                     @RequestParam(required = false, defaultValue = "10") Integer limit) {
-        PagedModel<ElectricInvoiceResponse> result = electricWaterService.findElectricByApartmentId(apartmentId, page, limit);
+    public ResponseEntity<APIResponse> findWaterBillByApartmentId(@PathVariable String apartmentId,
+                                                                  @RequestParam(required = false, defaultValue = "1") Integer page,
+                                                                  @RequestParam(required = false, defaultValue = "10") Integer limit) {
+        PagedModel<WaterInvoiceResponse> result = electricWaterService.findWaterByApartmentId(apartmentId, page, limit);
         APIResponse response = APIResponse.builder()
                 .code(HttpStatus.OK.value())
                 .message("SUCCESS")
