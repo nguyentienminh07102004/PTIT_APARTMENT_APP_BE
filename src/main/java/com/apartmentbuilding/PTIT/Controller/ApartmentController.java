@@ -27,35 +27,20 @@ public class ApartmentController {
     private final IApartmentService apartmentService;
 
     @PostMapping(value = "/")
-    public ResponseEntity<APIResponse> save(@Valid @RequestBody ApartmentRequest request) {
+    public ResponseEntity<ApartmentResponse> save(@Valid @RequestBody ApartmentRequest request) {
         ApartmentResponse apartmentResponse = this.apartmentService.save(request);
-        APIResponse response = APIResponse.builder()
-                .message("SUCCESS")
-                .code(HttpStatus.CREATED.value())
-                .data(apartmentResponse)
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(apartmentResponse);
     }
 
     @PostMapping(value = "/read-excel")
-    public ResponseEntity<APIResponse> saveFromFileExcel(@RequestPart MultipartFile file) {
+    public ResponseEntity<List<ApartmentResponse>> saveFromFileExcel(@RequestPart MultipartFile file) {
         List<ApartmentResponse> apartmentResponse = this.apartmentService.saveFromExcel(file);
-        APIResponse response = APIResponse.builder()
-                .message("SUCCESS")
-                .code(HttpStatus.CREATED.value())
-                .data(apartmentResponse)
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(apartmentResponse);
     }
 
     @GetMapping(value = "/")
-    public ResponseEntity<APIResponse> findAllApartments(@ModelAttribute ApartmentSearchRequest request) {
+    public ResponseEntity<PagedModel<ApartmentResponse>> findAllApartments(@ModelAttribute ApartmentSearchRequest request) {
         PagedModel<ApartmentResponse> apartmentResponsePagedModel = this.apartmentService.findAll(request);
-        APIResponse response = APIResponse.builder()
-                .message("SUCCESS")
-                .code(HttpStatus.OK.value())
-                .data(apartmentResponsePagedModel)
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(apartmentResponsePagedModel);
     }
 }

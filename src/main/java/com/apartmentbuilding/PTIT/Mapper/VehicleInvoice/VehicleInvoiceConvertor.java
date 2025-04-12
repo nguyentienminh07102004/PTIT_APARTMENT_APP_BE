@@ -4,8 +4,7 @@ import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.VehicleInvoiceReque
 import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleInvoiceEntity;
-import com.apartmentbuilding.PTIT.Model.Entity.VehicleTypeEntity;
-import com.apartmentbuilding.PTIT.Service.VehicleType.IVehicleTypeService;
+import com.apartmentbuilding.PTIT.Service.Vehicle.IVehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,22 +12,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class VehicleInvoiceConvertor {
     private final IVehicleInvoiceMapper vehicleInvoiceMapper;
-    private final IVehicleTypeService vehicleTypeService;
+    private final IVehicleService vehicleService;
 
     public VehicleInvoiceEntity requestToEntity(VehicleInvoiceRequest request, MonthlyInvoiceEntity monthlyInvoice) {
-        VehicleInvoiceEntity entity = vehicleInvoiceMapper.requestToEntity(request);
+        VehicleInvoiceEntity entity = this.vehicleInvoiceMapper.requestToEntity(request);
         entity.setMonthlyInvoice(monthlyInvoice);
-        VehicleTypeEntity type = vehicleTypeService.findByName(request.getTypeName());
-        entity.setType(type);
+        entity.setVehicle(this.vehicleService.findByLicensePlate(request.getLicensePlate()));
         return entity;
     }
 
     public VehicleInvoiceResponse entityToResponse(VehicleInvoiceEntity entity) {
-        VehicleInvoiceResponse response = vehicleInvoiceMapper.entityToResponse(entity);
+        VehicleInvoiceResponse response = this.vehicleInvoiceMapper.entityToResponse(entity);
         response.setApartmentId(entity.getMonthlyInvoice().getApartment().getId());
         response.setBillingTime(entity.getMonthlyInvoice().getBillingTime());
-        response.setType(entity.getType().getName());
-        response.setTotalPrice(entity.getUnitPrice() * entity.getQuantity());
+        response.setLicensePlate(entity.getVehicle().getLicensePlate());
         return response;
     }
 

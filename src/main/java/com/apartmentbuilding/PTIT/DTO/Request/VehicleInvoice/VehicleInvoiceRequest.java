@@ -13,8 +13,7 @@ import lombok.Setter;
 @Builder
 public class VehicleInvoiceRequest {
     private String apartmentId;
-    private String typeName;
     private Double unitPrice;
     private String billingTime;
-    private Integer quantity;
+    private String licensePlate;
 }

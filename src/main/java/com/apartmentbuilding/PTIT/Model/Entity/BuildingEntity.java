@@ -7,9 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,6 +26,13 @@ public class BuildingEntity {
     private String id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+    @Column()
+    private String address;
+    @Column()
+    @Temporal(TemporalType.DATE)
+    private Date buildAt;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @OneToMany(mappedBy = "building")
     private List<ApartmentEntity> apartments;

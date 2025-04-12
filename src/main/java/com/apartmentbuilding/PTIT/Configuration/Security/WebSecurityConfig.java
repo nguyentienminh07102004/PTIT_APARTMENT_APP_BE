@@ -76,12 +76,8 @@ public class WebSecurityConfig {
                         .jwt(jwt -> jwt.decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint((httpServletRequest, httpServletResponse, authException) -> {
-                            APIResponse response = APIResponse.builder()
-                                    .code(HttpStatus.UNAUTHORIZED.value())
-                                    .message(authException.getMessage())
-                                    .build();
                             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-                            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(response));
+                            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(authException.getMessage()));
                         }));
         return http.build();
     }

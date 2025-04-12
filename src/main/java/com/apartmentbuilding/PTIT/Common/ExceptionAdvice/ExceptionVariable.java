@@ -50,6 +50,8 @@ public enum ExceptionVariable {
     BUILDING_NOT_FOUND(404, "Building not found", HttpStatus.NOT_FOUND),
 
     VEHICLE_TYPE_NOT_FOUND(404, "Vehicle type not found", HttpStatus.NOT_FOUND),
+
+    VEHICLE_NOT_FOUND(404, "Vehicle not found", HttpStatus.NOT_FOUND),
     ;
 
     private final Integer code;

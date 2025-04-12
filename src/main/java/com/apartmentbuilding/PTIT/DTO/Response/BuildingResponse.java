@@ -6,15 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleInvoiceResponse {
+public class BuildingResponse {
     private String id;
-    private String licensePlate;
-    private Double unitPrice;
-    private String apartmentId;
-    private String billingTime;
+    private String name;
+    private String address;
+    private Date buildAt;
+    private String description;
 }

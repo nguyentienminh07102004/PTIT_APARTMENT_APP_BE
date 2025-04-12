@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
-import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +18,6 @@ public class ApartmentResponse {
     private String description;
     private Double area;
     private Integer floor;
-    private BuildingEntity building;
+    private BuildingResponse building;
 
 }

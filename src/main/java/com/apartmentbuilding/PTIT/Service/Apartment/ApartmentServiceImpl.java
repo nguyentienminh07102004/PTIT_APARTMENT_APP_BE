@@ -3,6 +3,7 @@ package com.apartmentbuilding.PTIT.Service.Apartment;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentSearchRequest;
 import com.apartmentbuilding.PTIT.DTO.Response.ApartmentResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
+import com.apartmentbuilding.PTIT.Mapper.Apartment.ApartmentConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
@@ -30,6 +31,7 @@ public class ApartmentServiceImpl implements IApartmentService {
     private final IApartmentRepository apartmentRepository;
     private final IBuildingService buildingService;
     private final IApartmentMapper apartmentMapper;
+    private final ApartmentConvertor apartmentConvertor;
     private final ReadExcel<ApartmentRequest> readExcel;
 
     @Override
@@ -48,7 +50,7 @@ public class ApartmentServiceImpl implements IApartmentService {
             apartment.setBuilding(building);
         }
         apartmentRepository.save(apartment);
-        return apartmentMapper.entityToResponse(apartment);
+        return this.apartmentConvertor.entityToResponse(apartment);
     }
 
     @Override
@@ -63,10 +65,11 @@ public class ApartmentServiceImpl implements IApartmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<ApartmentResponse> findAll(ApartmentSearchRequest apartmentSearchRequest) {
         Pageable pageable = PaginationUtils.pagination(apartmentSearchRequest.getPage(), apartmentSearchRequest.getLimit());
         Page<ApartmentEntity> apartmentEntities = this.apartmentRepository.findAll(pageable);
-        Page<ApartmentResponse> apartmentResponses = apartmentEntities.map(apartmentMapper::entityToResponse);
+        Page<ApartmentResponse> apartmentResponses = apartmentEntities.map(apartmentConvertor::entityToResponse);
         return new PagedModel<>(apartmentResponses);
     }
 }

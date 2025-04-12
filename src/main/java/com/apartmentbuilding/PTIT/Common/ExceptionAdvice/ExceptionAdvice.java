@@ -11,34 +11,19 @@ import java.util.Objects;
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler(value = DataInvalidException.class)
-    public ResponseEntity<APIResponse> handleDataInvalidException(DataInvalidException exception) {
-        APIResponse response = APIResponse.builder()
-                .message(exception.getExceptionVariable().getMessage())
-                .code(exception.getExceptionVariable().getStatus().value())
-                .data(exception.getMessage())
-                .build();
-        return ResponseEntity.status(exception.getExceptionVariable().getStatus()).body(response);
+    public ResponseEntity<String> handleDataInvalidException(DataInvalidException exception) {
+        return ResponseEntity.status(exception.getExceptionVariable().getStatus()).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<APIResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         ExceptionVariable exceptionVariable = ExceptionVariable.valueOf(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage());
-        APIResponse response = APIResponse.builder()
-                .message(exceptionVariable.getMessage())
-                .code(exceptionVariable.getStatus().value())
-                .data(exceptionVariable.getMessage())
-                .build();
-        return ResponseEntity.status(exceptionVariable.getStatus()).body(response);
+        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionVariable.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<APIResponse> handleConstraintViolation(ConstraintViolationException exception) {
+    public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException exception) {
         ExceptionVariable exceptionVariable = ExceptionVariable.valueOf(exception.getMessage());
-        APIResponse response = APIResponse.builder()
-                .message(exceptionVariable.getMessage())
-                .code(exceptionVariable.getStatus().value())
-                .data(exceptionVariable.getMessage())
-                .build();
-        return ResponseEntity.status(exceptionVariable.getStatus()).body(response);
+        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionVariable.getMessage());
     }
 }

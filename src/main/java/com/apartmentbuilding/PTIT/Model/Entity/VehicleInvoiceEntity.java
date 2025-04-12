@@ -17,21 +17,19 @@ import org.hibernate.annotations.Checks;
 @Table(name = "vehicleInvoices")
 @Getter
 @Setter
-@Checks(value = {@Check(constraints = "quantity > 0"),
-        @Check(constraints = "unitPrice > 0")})
+@Checks(value = {@Check(constraints = "unitPrice > 0")})
 public class VehicleInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private String id;
-    @Column(name = "quantity")
-    private Integer quantity;
-    @ManyToOne
-    @JoinColumn(name = "typeName", referencedColumnName = "name")
-    private VehicleTypeEntity type;
     @Column(name = "unitPrice")
     private Double unitPrice;
     @ManyToOne
     @JoinColumn(name = "monthlyInvoiceId")
     private MonthlyInvoiceEntity monthlyInvoice;
+
+    @ManyToOne()
+    @JoinColumn(name = "vehicleLicensePlate", referencedColumnName = "licensePlate")
+    private VehicleEntity vehicle;
 }
