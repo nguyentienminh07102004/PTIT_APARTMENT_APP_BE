@@ -1,16 +1,16 @@
 package com.apartmentbuilding.PTIT.Service.ElectricWater;
 
-import com.apartmentbuilding.PTIT.Beans.PaymentStatus;
-import com.apartmentbuilding.PTIT.Beans.TypeElectricWater;
-import com.apartmentbuilding.PTIT.DTO.Reponse.ElectricInvoiceResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.WaterInvoiceResponse;
+import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
+import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.ElectricRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.WaterRequest;
-import com.apartmentbuilding.PTIT.Domains.ApartmentEntity;
-import com.apartmentbuilding.PTIT.Domains.ElectricWaterInvoiceEntity;
-import com.apartmentbuilding.PTIT.Domains.MonthlyInvoiceEntity;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.Electric.ElectricConvertor;
 import com.apartmentbuilding.PTIT.Mapper.Electric.ElectricMapper;
 import com.apartmentbuilding.PTIT.Mapper.Water.WaterConvertor;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.apartmentbuilding.PTIT.Beans.ConstantConfig.WATER_TYPE;
+import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.WATER_TYPE;
 
 @Service
 @RequiredArgsConstructor

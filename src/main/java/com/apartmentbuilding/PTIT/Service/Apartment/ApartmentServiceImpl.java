@@ -1,16 +1,21 @@
 package com.apartmentbuilding.PTIT.Service.Apartment;
 
-import com.apartmentbuilding.PTIT.DTO.Reponse.ApartmentResponse;
+import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentSearchRequest;
+import com.apartmentbuilding.PTIT.DTO.Response.ApartmentResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
-import com.apartmentbuilding.PTIT.Domains.ApartmentEntity;
-import com.apartmentbuilding.PTIT.Domains.BuildingEntity;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.Apartment.IApartmentMapper;
 import com.apartmentbuilding.PTIT.Repository.IApartmentRepository;
 import com.apartmentbuilding.PTIT.Service.Building.IBuildingService;
+import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import com.apartmentbuilding.PTIT.Utils.ReadExcel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -55,5 +60,13 @@ public class ApartmentServiceImpl implements IApartmentService {
             apartmentResponses.add(this.save(apartmentRequest));
         }
         return apartmentResponses;
+    }
+
+    @Override
+    public PagedModel<ApartmentResponse> findAll(ApartmentSearchRequest apartmentSearchRequest) {
+        Pageable pageable = PaginationUtils.pagination(apartmentSearchRequest.getPage(), apartmentSearchRequest.getLimit());
+        Page<ApartmentEntity> apartmentEntities = this.apartmentRepository.findAll(pageable);
+        Page<ApartmentResponse> apartmentResponses = apartmentEntities.map(apartmentMapper::entityToResponse);
+        return new PagedModel<>(apartmentResponses);
     }
 }

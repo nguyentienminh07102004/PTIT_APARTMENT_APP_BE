@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Mapper.Water;
 
-import com.apartmentbuilding.PTIT.Beans.TypeElectricWater;
-import com.apartmentbuilding.PTIT.DTO.Reponse.WaterInvoiceResponse;
-import com.apartmentbuilding.PTIT.Domains.ElectricWaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
+import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import com.apartmentbuilding.PTIT.Repository.IElectricWaterRepository;
 import com.apartmentbuilding.PTIT.Utils.BillingTimeUtils;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Mapper.Apartment;
 
-import com.apartmentbuilding.PTIT.DTO.Reponse.ApartmentResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.ApartmentResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
-import com.apartmentbuilding.PTIT.Domains.ApartmentEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

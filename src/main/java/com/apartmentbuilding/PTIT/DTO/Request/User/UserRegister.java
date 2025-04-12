@@ -1,8 +1,7 @@
 package com.apartmentbuilding.PTIT.DTO.Request.User;
 
-import com.apartmentbuilding.PTIT.Utils.Validate.EmailHasExists.EmailHasExists;
-import com.apartmentbuilding.PTIT.Utils.Validate.IdentityNumberHasExists.IdentityNumberHasExists;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.apartmentbuilding.PTIT.Common.Validate.EmailHasExists.EmailHasExists;
+import com.apartmentbuilding.PTIT.Common.Validate.IdentityNumberHasExists.IdentityNumberHasExists;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

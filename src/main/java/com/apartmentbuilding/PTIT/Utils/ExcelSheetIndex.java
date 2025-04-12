@@ -1,11 +1,11 @@
 package com.apartmentbuilding.PTIT.Utils;
 
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 
-import static com.apartmentbuilding.PTIT.Beans.ConstantConfig.ELECTRIC_TYPE;
-import static com.apartmentbuilding.PTIT.Beans.ConstantConfig.VEHICLE_TYPE;
-import static com.apartmentbuilding.PTIT.Beans.ConstantConfig.WATER_TYPE;
+import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.ELECTRIC_TYPE;
+import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.VEHICLE_TYPE;
+import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.WATER_TYPE;
 
 public class ExcelSheetIndex {
     public static Integer getSheetIndex(String sheetType) {

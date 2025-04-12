@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/${api_prefix}/ai")
+@RequestMapping(value = "/ai")
 public class AIController {
     private final IAIService aiService;
 

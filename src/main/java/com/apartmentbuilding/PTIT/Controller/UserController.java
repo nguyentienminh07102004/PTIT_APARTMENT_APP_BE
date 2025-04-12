@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Reponse.APIResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.JwtResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.UserResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/${api_prefix}/users")
+@RequestMapping(value = "/users")
 public class UserController {
     private final IUserService userService;
 
@@ -98,7 +98,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/forgot-password")
-    public ResponseEntity<APIResponse> sendEmailForgotPassword(@RequestBody UserForgotPasswordSendEmail userForgotPasswordSendEmail) {
+    public ResponseEntity<APIResponse> sendEmailForgotPassword(@Valid @RequestBody UserForgotPasswordSendEmail userForgotPasswordSendEmail) {
         userService.sendEmailForgotPassword(userForgotPasswordSendEmail.getEmail());
         APIResponse response = APIResponse.builder()
                 .code(200)

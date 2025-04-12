@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Reponse.APIResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.ElectricInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.Service.ElectricWater.IElectricWaterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/${api_prefix}/electrics")
+@RequestMapping(value = "/electrics")
 public class ElectricController {
     private final IElectricWaterService electricWaterService;
 

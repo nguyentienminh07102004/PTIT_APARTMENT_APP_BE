@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT;
 
-import com.apartmentbuilding.PTIT.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.Domains.RoleEntity;
+import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
+import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
 import com.apartmentbuilding.PTIT.Service.Role.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

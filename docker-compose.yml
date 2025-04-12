@@ -15,6 +15,12 @@ services:
         restart: always
         ports:
             - "6379:6379"
+    mongodb:
+        image: mongodb/mongodb-community-server:7.0.2-ubuntu2204
+        container_name: buildingmanager_mongodb
+        restart: always
+        ports:
+            - "27018:27017"
     backend:
         image: nguyentienminh0710/buildingmanager:0.0.5
         container_name: buildingmanager_be

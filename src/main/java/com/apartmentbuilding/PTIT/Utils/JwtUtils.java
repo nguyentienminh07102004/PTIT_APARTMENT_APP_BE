@@ -1,10 +1,10 @@
 package com.apartmentbuilding.PTIT.Utils;
 
 import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
-import com.apartmentbuilding.PTIT.Domains.JwtEntity;
-import com.apartmentbuilding.PTIT.Domains.UserEntity;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;

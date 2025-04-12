@@ -1,11 +1,11 @@
 package com.apartmentbuilding.PTIT.Service.ElectricWater;
 
-import com.apartmentbuilding.PTIT.Beans.TypeElectricWater;
-import com.apartmentbuilding.PTIT.DTO.Reponse.ElectricInvoiceResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.WaterInvoiceResponse;
+import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
+import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.ElectricRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.WaterRequest;
-import com.apartmentbuilding.PTIT.Domains.ElectricWaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import org.springframework.data.web.PagedModel;
 import org.springframework.web.multipart.MultipartFile;
 

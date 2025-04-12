@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Repository;
 
-import com.apartmentbuilding.PTIT.Domains.RoleEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

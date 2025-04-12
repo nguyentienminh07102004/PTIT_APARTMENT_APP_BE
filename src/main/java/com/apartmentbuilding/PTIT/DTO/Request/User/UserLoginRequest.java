@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Request.User;
 
-import com.apartmentbuilding.PTIT.Utils.Validate.AccountLoginInOtherDevice.AccountLoginInOtherDevice;
+import com.apartmentbuilding.PTIT.Common.Validate.AccountLoginInOtherDevice.AccountLoginInOtherDevice;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Repository;
 
-import com.apartmentbuilding.PTIT.Domains.JwtEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

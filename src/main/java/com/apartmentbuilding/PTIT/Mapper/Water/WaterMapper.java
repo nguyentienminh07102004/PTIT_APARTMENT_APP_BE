@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Mapper.Water;
 
-import com.apartmentbuilding.PTIT.DTO.Reponse.WaterInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.WaterRequest;
-import com.apartmentbuilding.PTIT.Domains.ElectricWaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

@@ -1,23 +1,23 @@
 package com.apartmentbuilding.PTIT.Service.User;
 
-import com.apartmentbuilding.PTIT.Beans.ConstantConfig;
+import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
 import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
-import com.apartmentbuilding.PTIT.DTO.Reponse.JwtResponse;
-import com.apartmentbuilding.PTIT.DTO.Reponse.UserResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserRegister;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
-import com.apartmentbuilding.PTIT.Domains.JwtEntity;
-import com.apartmentbuilding.PTIT.Domains.RoleEntity;
-import com.apartmentbuilding.PTIT.Domains.UserEntity;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.User.UserMapper;
-import com.apartmentbuilding.PTIT.Redis.RedisHash.CodeForgotPassword;
-import com.apartmentbuilding.PTIT.Redis.Service.CodeForgotPassword.ICodeForgotPasswordService;
+import com.apartmentbuilding.PTIT.Model.RedisHash.CodeForgotPassword;
+import com.apartmentbuilding.PTIT.Service.CodeForgotPassword.ICodeForgotPasswordService;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Repository.IUserRepository;
 import com.apartmentbuilding.PTIT.Service.Role.IRoleService;
@@ -153,13 +153,19 @@ public class UserServiceImpl implements IUserService {
     public void changePassword(UserChangePasswordRequest userChangePasswordRequest) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = this.getUserByEmail(email);
-        if (passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
+            throw new DataInvalidException(ExceptionVariable.OLD_PASSWORD_NOT_CORRECT);
+        }
+        if (userChangePasswordRequest.getNewPassword().equals(userChangePasswordRequest.getOldPassword())) {
             throw new DataInvalidException(ExceptionVariable.OLD_PASSWORD_NEW_PASSWORD_MATCH);
         }
         if (!userChangePasswordRequest.getConfirmPassword().equals(userChangePasswordRequest.getNewPassword())) {
             throw new DataInvalidException(ExceptionVariable.PASSWORD_CONFIRM_PASSWORD_NOT_MATCH);
         }
         user.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+        // logout user ra
+        user.getJwt().setUser(null);
+        user.setJwt(null);
         userRepository.save(user);
     }
 

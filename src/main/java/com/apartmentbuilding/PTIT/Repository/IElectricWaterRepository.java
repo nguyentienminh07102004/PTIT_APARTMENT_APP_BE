@@ -1,13 +1,11 @@
 package com.apartmentbuilding.PTIT.Repository;
 
-import com.apartmentbuilding.PTIT.Beans.TypeElectricWater;
-import com.apartmentbuilding.PTIT.Domains.ElectricWaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface IElectricWaterRepository extends JpaRepository<ElectricWaterInvoiceEntity, String> {

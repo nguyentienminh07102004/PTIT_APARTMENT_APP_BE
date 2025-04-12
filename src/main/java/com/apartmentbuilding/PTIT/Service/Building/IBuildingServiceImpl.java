@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Service.Building;
 
-import com.apartmentbuilding.PTIT.Domains.BuildingEntity;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Repository.IBuildingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
