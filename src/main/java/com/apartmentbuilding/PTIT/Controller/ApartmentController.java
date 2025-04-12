@@ -1,7 +1,6 @@
 package com.apartmentbuilding.PTIT.Controller;
 
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentSearchRequest;
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.ApartmentResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
 import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;

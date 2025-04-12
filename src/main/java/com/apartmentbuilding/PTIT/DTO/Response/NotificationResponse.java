@@ -6,13 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class APIResponse {
-    private Integer code;
-    private String message;
-    private Object data;
+public class NotificationResponse {
+    private String id;
+    private String title;
+    private String description;
+    private String email;
+    private List<String> apartmentIds;
 }

@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Common.ExceptionAdvice;
 
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

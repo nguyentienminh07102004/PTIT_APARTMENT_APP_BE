@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleInvoiceEntity;
 import com.apartmentbuilding.PTIT.Service.VehicleInvoice.IVehicleInvoiceService;
@@ -25,26 +24,16 @@ public class VehicleInvoiceController {
     private final IVehicleInvoiceService vehicleInvoiceService;
 
     @PostMapping(value = "/")
-    public ResponseEntity<APIResponse> save(@RequestParam MultipartFile file) {
+    public ResponseEntity<List<VehicleInvoiceEntity>> save(@RequestParam MultipartFile file) {
         List<VehicleInvoiceEntity> vehicleInvoiceEntities = vehicleInvoiceService.save(file);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.CREATED.value())
-                .message("SUCCESS")
-                .data(vehicleInvoiceEntities)
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(vehicleInvoiceEntities);
     }
 
     @GetMapping(value = "/apartments/{apartmentId}")
-    public ResponseEntity<APIResponse> findByApartmentId(@PathVariable String apartmentId,
+    public ResponseEntity<PagedModel<VehicleInvoiceResponse>> findByApartmentId(@PathVariable String apartmentId,
                                                          @RequestParam(required = false) Integer page,
                                                          @RequestParam(required = false) Integer limit) {
         PagedModel<VehicleInvoiceResponse> result = vehicleInvoiceService.findByApartmentId(apartmentId, page, limit);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("SUCCESS")
-                .data(result)
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

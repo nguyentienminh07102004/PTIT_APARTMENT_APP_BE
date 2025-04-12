@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Service.MonthlyInvoice.IMonthlyInvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +19,10 @@ public class MonthlyInvoiceController {
     private final IMonthlyInvoiceService monthlyInvoiceService;
 
     @GetMapping(value = "/apartments/{apartmentId}")
-    public ResponseEntity<APIResponse> findMonthlyInvoiceByApartmentId(@PathVariable String apartmentId,
+    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMonthlyInvoiceByApartmentId(@PathVariable String apartmentId,
                                                                        @RequestParam(required = false, defaultValue = "0") Integer page,
                                                                        @RequestParam(required = false, defaultValue = "10") Integer limit) {
         PagedModel<MonthlyInvoiceResponse> monthInvoices = monthlyInvoiceService.findByApartment_Id(apartmentId, page, limit);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("SUCCESS")
-                .data(monthInvoices)
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(monthInvoices);
     }
 }

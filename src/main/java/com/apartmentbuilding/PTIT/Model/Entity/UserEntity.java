@@ -56,4 +56,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private List<ApartmentEntity> apartments;
+
+    @OneToMany(mappedBy = "user")
+    private List<NotificationEntity> notifications;
 }

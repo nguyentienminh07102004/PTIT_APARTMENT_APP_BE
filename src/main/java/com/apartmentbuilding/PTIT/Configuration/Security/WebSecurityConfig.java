@@ -1,7 +1,6 @@
 package com.apartmentbuilding.PTIT.Configuration.Security;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;

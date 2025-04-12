@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Response.APIResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
@@ -31,100 +30,59 @@ public class UserController {
     private final IUserService userService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<APIResponse> login(@Valid @RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
         String device = httpServletRequest.getHeader(HttpHeaders.USER_AGENT);
         JwtResponse jwtResponse = userService.login(request, device);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .data(jwtResponse)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
     @PostMapping(value = "/login/google")
-    public ResponseEntity<APIResponse> loginGoogle(@Valid @RequestBody UserSocialLogin request, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<JwtResponse> loginGoogle(@Valid @RequestBody UserSocialLogin request, HttpServletRequest httpServletRequest) {
         String device = httpServletRequest.getHeader(HttpHeaders.USER_AGENT);
         JwtResponse jwtResponse = userService.loginSocial(request, device);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .data(jwtResponse)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<APIResponse> logout(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         userService.logout(token);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping(value = "/my-info")
-    public ResponseEntity<APIResponse> myInfo() {
+    public ResponseEntity<UserResponse> myInfo() {
         UserResponse userResponse = userService.getMyInfo();
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .data(userResponse)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<APIResponse> register(@Valid @RequestBody UserRegister userRegister) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegister userRegister) {
         UserResponse userResponse = userService.register(userRegister);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.CREATED.value())
-                .data(userResponse)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
     @PutMapping(value = "/change-password")
-    public ResponseEntity<APIResponse> changePassword(@Valid @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         userService.changePassword(userChangePasswordRequest);
-        APIResponse response = APIResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/forgot-password")
-    public ResponseEntity<APIResponse> sendEmailForgotPassword(@Valid @RequestBody UserForgotPasswordSendEmail userForgotPasswordSendEmail) {
+    public ResponseEntity<Void> sendEmailForgotPassword(@Valid @RequestBody UserForgotPasswordSendEmail userForgotPasswordSendEmail) {
         userService.sendEmailForgotPassword(userForgotPasswordSendEmail.getEmail());
-        APIResponse response = APIResponse.builder()
-                .code(200)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping(value = "/forgot-password")
-    public ResponseEntity<APIResponse> verifyForgotPassword(@Valid @RequestBody UserForgotPassword userForgotPassword) {
+    public ResponseEntity<Void> verifyForgotPassword(@Valid @RequestBody UserForgotPassword userForgotPassword) {
         userService.verifyCodeForgotPassword(userForgotPassword);
-        APIResponse response = APIResponse.builder()
-                .code(200)
-                .message("SUCCESS")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/token-valid")
-    public ResponseEntity<APIResponse> verifyToken(@Valid @RequestBody TokenRequest tokenRequest, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<JwtResponse> verifyToken(@Valid @RequestBody TokenRequest tokenRequest, HttpServletRequest httpServletRequest) {
         JwtResponse jwtResponse = userService.validateToken(tokenRequest, httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
-        APIResponse response = APIResponse.builder()
-                .code(200)
-                .message("SUCCESS")
-                .data(jwtResponse)
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 }
