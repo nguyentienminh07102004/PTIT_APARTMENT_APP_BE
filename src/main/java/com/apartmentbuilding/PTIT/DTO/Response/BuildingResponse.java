@@ -19,4 +19,5 @@ public class BuildingResponse {
     private String address;
     private Date buildAt;
     private String description;
+    private Double unitNumber;
 }

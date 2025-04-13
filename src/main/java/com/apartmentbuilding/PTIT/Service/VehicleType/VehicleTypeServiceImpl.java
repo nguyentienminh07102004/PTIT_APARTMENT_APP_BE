@@ -2,7 +2,7 @@ package com.apartmentbuilding.PTIT.Service.VehicleType;
 
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleTypeEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Repository.IVehicleTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

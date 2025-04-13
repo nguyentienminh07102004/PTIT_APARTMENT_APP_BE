@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.Common.ExceptionAdvice;
+package com.apartmentbuilding.PTIT.Common.Enum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public enum ExceptionVariable {
 
     ACCOUNT_LOGIN_IN_OTHER_DEVICE(400, "Account is login in an other device", HttpStatus.BAD_REQUEST),
 
-    USER_NOT_FOUND(400, "User Id is not exists", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(400, "User email is not exists", HttpStatus.BAD_REQUEST),
 
     ROLE_NOT_FOUND(404, "Role is not exists", HttpStatus.NOT_FOUND),
 

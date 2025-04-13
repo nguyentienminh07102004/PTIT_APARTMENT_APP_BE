@@ -27,6 +27,7 @@ public class MonthlyInvoiceConvertor {
         List<ElectricWaterInvoiceEntity> electricWaterInvoices = monthlyInvoiceEntity.getElectricWaterInvoices();
         ElectricWaterInvoiceEntity electricInvoice;
         ElectricWaterInvoiceEntity waterInvoice;
+        Double totalPrice = monthlyInvoiceEntity.getApartment().getArea() * monthlyInvoiceEntity.getApartment().getBuilding().getUnitNumber();
         if (electricWaterInvoices.get(0).getType().equals(TypeElectricWater.ELECTRIC)) {
             electricInvoice = electricWaterInvoices.get(0);
             waterInvoice = electricWaterInvoices.get(1);
@@ -36,6 +37,8 @@ public class MonthlyInvoiceConvertor {
         }
         ElectricInvoiceResponse electricInvoiceResponse = electricConvertor.entityToResponse(electricInvoice);
         WaterInvoiceResponse waterInvoiceResponse = waterConvertor.entityToResponse(waterInvoice);
+        totalPrice += electricInvoiceResponse.getTotalPrice();
+        totalPrice += waterInvoiceResponse.getTotalPrice();
         monthlyInvoiceResponse.setElectricInvoice(electricInvoiceResponse);
         monthlyInvoiceResponse.setWaterInvoice(waterInvoiceResponse);
         monthlyInvoiceResponse.setVehicleInvoices(
@@ -43,6 +46,10 @@ public class MonthlyInvoiceConvertor {
                         .map(vehicleInvoiceConvertor::entityToResponse)
                         .toList()
         );
+        totalPrice += monthlyInvoiceEntity.getVehicleInvoices()
+                .stream()
+                .reduce(0.0,  (total, invoice) -> total + invoice.getUnitPrice(), Double::sum);
+        monthlyInvoiceResponse.setTotalPrice(totalPrice);
         return monthlyInvoiceResponse;
     }
 }

@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Service.Vehicle;
 
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleEntity;
 import com.apartmentbuilding.PTIT.Repository.IVehicleRepository;
 import lombok.RequiredArgsConstructor;

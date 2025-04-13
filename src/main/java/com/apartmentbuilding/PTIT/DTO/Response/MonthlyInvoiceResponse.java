@@ -26,4 +26,5 @@ public class MonthlyInvoiceResponse {
     private ElectricInvoiceResponse electricInvoice;
     private WaterInvoiceResponse waterInvoice;
     private List<VehicleInvoiceResponse> vehicleInvoices;
+    private Double totalPrice;
 }

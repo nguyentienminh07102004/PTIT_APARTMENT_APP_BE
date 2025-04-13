@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -21,17 +23,18 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JwtEntity {
+public class JwtEntity implements Serializable {
     @Id
     @Column(name = "id")
     private String id;
     @Column(name = "expiry")
-    private Date expiry; // refresh token
+    private Date expiry;
     @Column(name = "device")
     private String device;
     @Column(name = "refreshToken")
     private String refreshToken;
     @OneToOne
     @JoinColumn(name = "userEmail", referencedColumnName = "email")
+    @JsonIgnore
     private UserEntity user;
 }

@@ -10,7 +10,7 @@ import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.Electric.ElectricConvertor;
 import com.apartmentbuilding.PTIT.Mapper.Electric.ElectricMapper;
 import com.apartmentbuilding.PTIT.Mapper.Water.WaterConvertor;

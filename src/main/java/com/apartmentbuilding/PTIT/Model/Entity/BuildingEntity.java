@@ -9,7 +9,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -19,6 +22,9 @@ import java.util.List;
 @Table(name = "buildings")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BuildingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,6 +39,8 @@ public class BuildingEntity {
     private Date buildAt;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Column(name = "unitNumber", columnDefinition = "double precision")
+    private Double unitNumber;
 
     @OneToMany(mappedBy = "building")
     private List<ApartmentEntity> apartments;

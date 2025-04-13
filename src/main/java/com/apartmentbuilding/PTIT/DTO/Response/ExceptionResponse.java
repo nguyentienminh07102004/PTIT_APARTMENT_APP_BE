@@ -11,12 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApartmentResponse {
-    private String id;
-    private String name;
-    private String description;
-    private Double area;
-    private Integer floor;
-    private BuildingResponse building;
-
+public class ExceptionResponse {
+    private String message;
 }

@@ -7,7 +7,7 @@ import com.apartmentbuilding.PTIT.Mapper.Apartment.ApartmentConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.Apartment.IApartmentMapper;
 import com.apartmentbuilding.PTIT.Repository.IApartmentRepository;
 import com.apartmentbuilding.PTIT.Service.Building.IBuildingService;

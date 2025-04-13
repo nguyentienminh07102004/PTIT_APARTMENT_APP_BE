@@ -31,8 +31,6 @@ public class ApartmentEntity {
     private String id;
     @Column(name = "name")
     private String name;
-    @Column(name = "unitNumber")
-    private String unitNumber;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     @Column(name = "area", columnDefinition = "double precision")

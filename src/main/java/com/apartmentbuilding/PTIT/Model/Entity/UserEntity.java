@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -28,7 +30,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
+public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -55,8 +57,10 @@ public class UserEntity {
     private JwtEntity jwt;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<ApartmentEntity> apartments;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<NotificationEntity> notifications;
 }

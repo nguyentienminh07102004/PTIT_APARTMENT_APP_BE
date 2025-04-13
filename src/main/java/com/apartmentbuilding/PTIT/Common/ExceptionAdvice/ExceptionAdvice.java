@@ -1,5 +1,7 @@
 package com.apartmentbuilding.PTIT.Common.ExceptionAdvice;
 
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.DTO.Response.ExceptionResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,19 +13,28 @@ import java.util.Objects;
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler(value = DataInvalidException.class)
-    public ResponseEntity<String> handleDataInvalidException(DataInvalidException exception) {
-        return ResponseEntity.status(exception.getExceptionVariable().getStatus()).body(exception.getMessage());
+    public ResponseEntity<ExceptionResponse> handleDataInvalidException(DataInvalidException exception) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .message(exception.getExceptionVariable().getMessage())
+                .build();
+        return ResponseEntity.status(exception.getExceptionVariable().getStatus()).body(exceptionResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         ExceptionVariable exceptionVariable = ExceptionVariable.valueOf(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage());
-        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionVariable.getMessage());
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .message(exceptionVariable.getMessage())
+                .build();
+        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionResponse);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException exception) {
+    public ResponseEntity<ExceptionResponse> handleConstraintViolation(ConstraintViolationException exception) {
         ExceptionVariable exceptionVariable = ExceptionVariable.valueOf(exception.getMessage());
-        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionVariable.getMessage());
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .message(exceptionVariable.getMessage())
+                .build();
+        return ResponseEntity.status(exceptionVariable.getStatus()).body(exceptionResponse);
     }
 }

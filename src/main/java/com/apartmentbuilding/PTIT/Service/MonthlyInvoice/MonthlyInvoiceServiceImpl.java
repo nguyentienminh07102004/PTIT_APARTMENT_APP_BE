@@ -3,7 +3,7 @@ package com.apartmentbuilding.PTIT.Service.MonthlyInvoice;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.MonthlyInvoice.MonthlyInvoiceConvertor;
 import com.apartmentbuilding.PTIT.Repository.IMonthlyInvoiceRepository;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;

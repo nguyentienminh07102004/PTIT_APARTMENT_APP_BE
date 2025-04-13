@@ -1,36 +1,37 @@
 package com.apartmentbuilding.PTIT.Service.User;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
-import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
-import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserRegister;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
+import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
+import com.apartmentbuilding.PTIT.Mapper.User.UserMapper;
 import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
-import com.apartmentbuilding.PTIT.Mapper.User.UserMapper;
 import com.apartmentbuilding.PTIT.Model.RedisHash.CodeForgotPassword;
-import com.apartmentbuilding.PTIT.Service.CodeForgotPassword.ICodeForgotPasswordService;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Repository.IUserRepository;
+import com.apartmentbuilding.PTIT.Service.CodeForgotPassword.ICodeForgotPasswordService;
 import com.apartmentbuilding.PTIT.Service.Role.IRoleService;
 import com.apartmentbuilding.PTIT.Utils.JwtUtils;
 import com.apartmentbuilding.PTIT.Utils.SendEmailUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -71,13 +72,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public JwtResponse login(@Valid UserLoginRequest request, String device) {
+    public JwtResponse login(UserLoginRequest request, String device) {
         UserEntity user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.EMAIL_PASSWORD_NOT_MATCH));
-        JwtEntity jwt = user.getJwt();
-        if (jwt != null) {
-            throw new DataInvalidException(ExceptionVariable.ACCOUNT_LOGIN_IN_OTHER_DEVICE);
-        }
         if (request.getIsSocial() != null && !request.getIsSocial()) {
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new DataInvalidException(ExceptionVariable.EMAIL_PASSWORD_NOT_MATCH);
@@ -136,6 +133,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "getUserByEmail", key = "#email")
     public UserEntity getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.USER_NOT_FOUND));
@@ -143,8 +141,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserResponse getMyInfo() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    @Cacheable(cacheNames = "getMyInfo", key = "#authentication.name")
+    public UserResponse getMyInfo(Authentication authentication) {
+        String email = authentication.getName();
         return userMapper.userEntityToUserResponse(this.getUserByEmail(email));
     }
 

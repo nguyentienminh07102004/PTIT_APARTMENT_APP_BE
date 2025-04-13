@@ -9,12 +9,13 @@ import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserRegister;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
 import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
+import org.springframework.security.core.Authentication;
 
 public interface IUserService {
     JwtResponse login(UserLoginRequest request, String device);
     JwtResponse loginSocial(UserSocialLogin request, String device);
     UserEntity getUserByEmail(String email);
-    UserResponse getMyInfo();
+    UserResponse getMyInfo(Authentication authentication);
     void changePassword(UserChangePasswordRequest userChangePasswordRequest);
     void logout(String token);
     UserResponse register(UserRegister userRegister);

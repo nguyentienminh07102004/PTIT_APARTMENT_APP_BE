@@ -2,7 +2,7 @@ package com.apartmentbuilding.PTIT.Configuration.Security;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +36,7 @@ import java.util.List;
 //@EnableWebSocketSecurity
 @Configuration
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class WebSecurityConfiguration {
     @Value(value = "${secret_key}")
     private String signingKey;
     private final JwtUtils jwtUtils;
@@ -51,22 +51,21 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/users/login/google").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/refresh-token").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/logout")
-                    .access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.POST, "/users/logout").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
                 .requestMatchers(HttpMethod.POST, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/token-valid").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/my-info")
+                .access(new WebExpressionAuthorizationManager("not isAnonymous()"))
 
                 .requestMatchers(HttpMethod.POST, "/electric/").hasRole(ConstantConfig.ADMIN_ROLE)
-                .requestMatchers(HttpMethod.GET, "/electrics/apartment/{apartmentId}")
-                    .access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.GET, "/electrics/apartment/{apartmentId}").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
 
                 .requestMatchers(HttpMethod.POST, "/apartments**").hasRole(ConstantConfig.ADMIN_ROLE)
                 .requestMatchers(HttpMethod.GET, "/apartments/").permitAll()
 
                 .requestMatchers("/reports/**").permitAll()
 
-                .requestMatchers("/ai**").permitAll()
                 .requestMatchers("/ws**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
