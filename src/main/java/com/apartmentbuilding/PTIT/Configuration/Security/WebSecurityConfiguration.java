@@ -64,10 +64,15 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/apartments**").hasRole(ConstantConfig.ADMIN_ROLE)
                 .requestMatchers(HttpMethod.GET, "/apartments/").permitAll()
 
-                .requestMatchers("/reports/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/buildings").permitAll()
+
+                .requestMatchers(HttpMethod.POST, "/requests/send-request").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.GET, "/requests").hasRole(ConstantConfig.ADMIN_ROLE)
+
+                .requestMatchers("/notifications/**").permitAll()
 
                 .requestMatchers("/ws**").permitAll()
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
         http.cors(cors -> corsFilter());
         http.oauth2ResourceServer(oauth2 ->
@@ -110,7 +115,7 @@ public class WebSecurityConfiguration {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3002", "http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

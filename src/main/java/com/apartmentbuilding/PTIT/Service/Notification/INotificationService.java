@@ -5,5 +5,5 @@ import com.apartmentbuilding.PTIT.DTO.Response.NotificationResponse;
 
 public interface INotificationService {
     NotificationResponse save(NotificationRequest notificationRequest);
-    void sendNotification(NotificationRequest notificationRequest);
+    void sendNotification(String destination, NotificationResponse notificationResponse);
 }

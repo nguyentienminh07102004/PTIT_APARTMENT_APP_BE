@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.DTO.Response;
+package com.apartmentbuilding.PTIT.DTO.Request.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationResponse {
-    private String id;
-    private String title;
-    private String description;
+public class RequestSearchRequest {
+    private Integer page;
+    private Integer limit;
 }

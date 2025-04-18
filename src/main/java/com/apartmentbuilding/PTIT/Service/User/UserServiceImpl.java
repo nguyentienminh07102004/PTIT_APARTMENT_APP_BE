@@ -26,7 +26,6 @@ import com.apartmentbuilding.PTIT.Utils.SendEmailUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -133,7 +132,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "getUserByEmail", key = "#email")
+    //@Cacheable(cacheNames = "getUserByEmail", key = "#email")
     public UserEntity getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.USER_NOT_FOUND));
@@ -141,7 +140,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "getMyInfo", key = "#authentication.name")
+    //@Cacheable(cacheNames = "getMyInfo", key = "#authentication.name")
     public UserResponse getMyInfo(Authentication authentication) {
         String email = authentication.getName();
         return userMapper.userEntityToUserResponse(this.getUserByEmail(email));

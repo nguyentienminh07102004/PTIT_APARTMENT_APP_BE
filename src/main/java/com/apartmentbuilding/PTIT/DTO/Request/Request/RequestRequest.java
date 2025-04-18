@@ -1,6 +1,6 @@
-package com.apartmentbuilding.PTIT.DTO.Request.Report;
+package com.apartmentbuilding.PTIT.DTO.Request.Request;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ReportType;
+import com.apartmentbuilding.PTIT.Common.Enum.RequestType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReportRequest {
+public class RequestRequest {
     private String content;
     private String title;
     private String apartmentId;
-    private ReportType type;
+    private RequestType type;
 }

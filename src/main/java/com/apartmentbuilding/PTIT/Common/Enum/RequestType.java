@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Common.Enum;
 
-public enum ReportType {
+public enum RequestType {
     REPAIR_AND_MAINTENANCE,
     FEEDBACK_AND_COMMENTS,
     CLEANING,

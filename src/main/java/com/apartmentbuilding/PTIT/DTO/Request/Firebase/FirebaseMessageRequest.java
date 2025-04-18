@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.DTO.Request.Notification;
+package com.apartmentbuilding.PTIT.DTO.Request.Firebase;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationRequest {
+public class FirebaseMessageRequest {
     private String title;
-    private String description;
-    private String type;
-    private String[] recipients;
+    private String body;
+    private String image;
+    private String registrationToken;
 }
