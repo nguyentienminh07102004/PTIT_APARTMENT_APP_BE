@@ -26,7 +26,7 @@ import java.util.List;
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
 
     @ManyToOne
@@ -38,11 +38,11 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "apartmentId")
     private ApartmentEntity apartment;
-    @Column(name = "status")
+    @Column()
     @Enumerated(value = EnumType.STRING)
     private BookingStatus status;
-    @Column(name = "date")
+    @Column()
     private Date date;
-    @Column(name = "bookingAt")
+    @Column()
     private Date bookingAt;
 }

@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Repository;
 
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

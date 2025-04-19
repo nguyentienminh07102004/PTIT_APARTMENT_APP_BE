@@ -27,19 +27,17 @@ import java.util.List;
 public class ApartmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "name")
+    @Column()
     private String name;
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
-    @Column(name = "area", columnDefinition = "double precision")
+    @Column(columnDefinition = "double precision")
     private Double area;
-    @Column(name = "floor", columnDefinition = "smallint")
-    private Integer floor;
     @ManyToOne
-    @JoinColumn(name = "buildingId")
-    private BuildingEntity building;
+    @JoinColumn(referencedColumnName = "floorNumber")
+    private FloorEntity floor;
 
     @ManyToOne
     @JoinColumn(name = "userEmail", referencedColumnName = "email")

@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Mapper.MonthlyInvoice;
 
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;

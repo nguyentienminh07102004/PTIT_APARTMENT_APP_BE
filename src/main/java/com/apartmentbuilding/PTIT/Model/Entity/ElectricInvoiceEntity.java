@@ -1,10 +1,7 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,10 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "electricWaterInvoice")
+@Table(name = "electricInvoices")
 @Getter
 @Setter
-public class ElectricWaterInvoiceEntity {
+public class ElectricInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -27,9 +24,6 @@ public class ElectricWaterInvoiceEntity {
     private Double unitPrice;
     @Column(name = "currentNumber")
     private Integer currentNumber;
-    @Column(name = "type")
-    @Enumerated(value = EnumType.STRING)
-    private TypeElectricWater type;
 
     @ManyToOne
     @JoinColumn(name = "monthlyInvoiceId")

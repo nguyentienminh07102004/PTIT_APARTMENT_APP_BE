@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Mapper.Electric;
 
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.ElectricWaterInvoiceEntity;
 import com.apartmentbuilding.PTIT.Repository.IElectricWaterRepository;

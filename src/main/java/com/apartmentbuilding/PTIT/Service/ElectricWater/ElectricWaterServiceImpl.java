@@ -1,7 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.ElectricWater;
 
 import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.ElectricRequest;
@@ -52,7 +51,6 @@ public class ElectricWaterServiceImpl implements IElectricWaterService {
     @Transactional
     public ElectricInvoiceResponse save(ElectricRequest request) {
         ElectricWaterInvoiceEntity entity = electricMapper.requestToEntity(request);
-        entity.setType(TypeElectricWater.ELECTRIC);
         // check monthlyInvoice exists ?
         String billingTime = request.getBillingTime(); // format: MM/YYYY
         MonthlyInvoiceEntity monthlyInvoice = monthlyInvoiceService.findByBillingTimeAndApartment_Id(billingTime, request.getApartmentId());
@@ -99,7 +97,7 @@ public class ElectricWaterServiceImpl implements IElectricWaterService {
     @Override
     @Transactional(readOnly = true)
     public PagedModel<ElectricInvoiceResponse> findElectricByApartmentId(String apartmentId, Integer page, Integer limit) {
-        Page<ElectricWaterInvoiceEntity> entities = this.electricWaterRepository.findDistinctByMonthlyInvoice_Apartment_IdAndType(apartmentId, TypeElectricWater.ELECTRIC, PaginationUtils.pagination(page, limit));
+        Page<ElectricWaterInvoiceEntity> entities = this.electricWaterRepository.findDistinctByMonthlyInvoice_Apartment_IdAndType(apartmentId,  PaginationUtils.pagination(page, limit));
         Page<ElectricInvoiceResponse> electricInvoiceResponses = entities.map(electricConvertor::entityToResponse);
         return new PagedModel<>(electricInvoiceResponses);
     }
@@ -116,7 +114,6 @@ public class ElectricWaterServiceImpl implements IElectricWaterService {
     @Transactional
     public WaterInvoiceResponse save(WaterRequest request) {
         ElectricWaterInvoiceEntity entity = waterMapper.requestToEntity(request);
-        entity.setType(TypeElectricWater.WATER);
         String billingTime = request.getBillingTime();
         ApartmentEntity apartment = apartmentService.findById(request.getApartmentId());
         MonthlyInvoiceEntity monthlyInvoice = monthlyInvoiceService.findByBillingTimeAndApartment_Id(billingTime, request.getApartmentId());

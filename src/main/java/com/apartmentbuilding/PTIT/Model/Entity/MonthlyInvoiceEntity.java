@@ -29,22 +29,21 @@ import java.util.List;
 public class MonthlyInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @ManyToOne
-    @JoinColumn(name = "apartmentId")
+    @ManyToOne()
+    @JoinColumn()
     private ApartmentEntity apartment;
-    @Column(name = "paidDate")
+    @Column()
     private Date paidDate;
-    @Column(name = "billingTime")
+    @Column()
     private String billingTime;
-    @Column(name = "createdDate")
+    @Column()
     private Date createdDate;
-    @Column(name = "status")
+    @Column()
     private PaymentStatus status;
-
-    @OneToMany(mappedBy = "monthlyInvoice")
-    private List<ElectricWaterInvoiceEntity> electricWaterInvoices;
+    @Column()
+    private Date dueDate;
 
     @OneToMany(mappedBy = "monthlyInvoice")
     private List<VehicleInvoiceEntity> vehicleInvoices;

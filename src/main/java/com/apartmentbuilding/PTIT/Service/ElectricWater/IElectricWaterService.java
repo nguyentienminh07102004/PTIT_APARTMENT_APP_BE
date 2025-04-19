@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Service.ElectricWater;
 
-import com.apartmentbuilding.PTIT.Common.Enum.TypeElectricWater;
 import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater.ElectricRequest;

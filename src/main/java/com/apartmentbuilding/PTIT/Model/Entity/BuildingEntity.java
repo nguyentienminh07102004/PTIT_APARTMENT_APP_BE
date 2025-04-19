@@ -43,5 +43,5 @@ public class BuildingEntity {
     private Double unitNumber;
 
     @OneToMany(mappedBy = "building")
-    private List<ApartmentEntity> apartments;
+    private List<FloorEntity> floors;
 }
