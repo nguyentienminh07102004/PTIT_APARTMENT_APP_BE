@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -20,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RoleEntity implements Serializable {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -31,7 +29,6 @@ public class RoleEntity implements Serializable {
     private String code;
 
     @OneToMany(mappedBy = "role")
-    @JsonIgnore
     private List<UserEntity> users;
 
     public RoleEntity(String code, String name) {

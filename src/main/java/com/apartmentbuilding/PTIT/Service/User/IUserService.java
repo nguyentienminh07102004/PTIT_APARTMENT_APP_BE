@@ -23,5 +23,5 @@ public interface IUserService {
     boolean existByIdentityNumber(String identityNumber);
     void sendEmailForgotPassword(String email);
     void verifyCodeForgotPassword(UserForgotPassword userForgotPassword);
-    JwtResponse validateToken(TokenRequest tokenRequest, String device);
+    //JwtResponse validateToken(TokenRequest tokenRequest, String device);
 }

@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,14 +18,13 @@ import lombok.Setter;
 public class ElectricInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "unitPrice")
+    @Column()
     private Double unitPrice;
-    @Column(name = "currentNumber")
+    @Column()
     private Integer currentNumber;
-
-    @ManyToOne
+    @OneToOne()
     @JoinColumn(name = "monthlyInvoiceId")
     private MonthlyInvoiceEntity monthlyInvoice;
 }

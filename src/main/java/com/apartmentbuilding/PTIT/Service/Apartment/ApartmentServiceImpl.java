@@ -1,16 +1,16 @@
 package com.apartmentbuilding.PTIT.Service.Apartment;
 
+import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentSearchRequest;
 import com.apartmentbuilding.PTIT.DTO.Response.ApartmentResponse;
-import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
 import com.apartmentbuilding.PTIT.Mapper.Apartment.ApartmentConvertor;
-import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
-import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Mapper.Apartment.IApartmentMapper;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.FloorEntity;
 import com.apartmentbuilding.PTIT.Repository.IApartmentRepository;
-import com.apartmentbuilding.PTIT.Service.Building.IBuildingService;
+import com.apartmentbuilding.PTIT.Service.Floor.IFloorService;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import com.apartmentbuilding.PTIT.Utils.ReadExcel;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements IApartmentService {
     private final IApartmentRepository apartmentRepository;
-    private final IBuildingService buildingService;
+    private final IFloorService floorService;
     private final IApartmentMapper apartmentMapper;
     private final ApartmentConvertor apartmentConvertor;
-    private final ReadExcel<ApartmentRequest> readExcel;
+    private final ReadExcel readExcel;
 
     @Override
     @Transactional(readOnly = true)
@@ -44,19 +44,19 @@ public class ApartmentServiceImpl implements IApartmentService {
     @Override
     @Transactional
     public ApartmentResponse save(ApartmentRequest apartmentRequest) {
-        ApartmentEntity apartment = apartmentMapper.requestToEntity(apartmentRequest);
+        ApartmentEntity apartment = this.apartmentMapper.requestToEntity(apartmentRequest);
         if (StringUtils.hasText(apartmentRequest.getBuildingId())) {
-            BuildingEntity building = buildingService.findById(apartmentRequest.getBuildingId());
-            apartment.setBuilding(building);
+            FloorEntity floor = this.floorService.findById(apartmentRequest.getBuildingId());
+            apartment.setFloor(floor);
         }
-        apartmentRepository.save(apartment);
+        this.apartmentRepository.save(apartment);
         return this.apartmentConvertor.entityToResponse(apartment);
     }
 
     @Override
     @Transactional
     public List<ApartmentResponse> saveFromExcel(MultipartFile file) {
-        List<ApartmentRequest> apartmentRequests = readExcel.readExcel(file, 0, ApartmentRequest.class);
+        List<ApartmentRequest> apartmentRequests = this.readExcel.readExcel(file, 0, ApartmentRequest.class);
         List<ApartmentResponse> apartmentResponses = new ArrayList<>();
         for (ApartmentRequest apartmentRequest : apartmentRequests) {
             apartmentResponses.add(this.save(apartmentRequest));

@@ -1,10 +1,10 @@
 package com.apartmentbuilding.PTIT.Service.MonthlyInvoice;
 
-import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
-import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
+import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.MonthlyInvoice.MonthlyInvoiceConvertor;
+import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Repository.IMonthlyInvoiceRepository;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
@@ -22,38 +22,38 @@ public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
     @Override
     @Transactional(readOnly = true)
     public boolean existsById(String id) {
-        return monthlyInvoiceRepository.existsById(id);
+        return this.monthlyInvoiceRepository.existsById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public MonthlyInvoiceEntity findById(String id) {
-        return monthlyInvoiceRepository.findById(id)
+        return this.monthlyInvoiceRepository.findById(id)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.MONTHLY_INVOICE_NOT_FOUND));
     }
 
     @Override
     @Transactional
     public MonthlyInvoiceEntity save(MonthlyInvoiceEntity monthlyInvoice) {
-        return monthlyInvoiceRepository.save(monthlyInvoice);
+        return this.monthlyInvoiceRepository.save(monthlyInvoice);
     }
 
     @Override
     @Transactional(readOnly = true)
     public MonthlyInvoiceEntity findByBillingTimeAndApartment_Id(String billingTime, String apartmentId) {
-        return monthlyInvoiceRepository.findByBillingTimeAndApartment_Id(billingTime, apartmentId);
+        return this.monthlyInvoiceRepository.findByBillingTimeAndApartment_Id(billingTime, apartmentId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByBillingTimeAndApartment_Id(String billingTime, String apartmentId) {
-        return monthlyInvoiceRepository.existsByBillingTimeAndApartment_Id(billingTime, apartmentId);
+        return this.monthlyInvoiceRepository.existsByBillingTimeAndApartment_Id(billingTime, apartmentId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PagedModel<MonthlyInvoiceResponse> findByApartment_Id(String apartmentId, Integer page, Integer limit) {
-        Page<MonthlyInvoiceEntity> invoiceEntityPage = monthlyInvoiceRepository.findByApartment_Id(apartmentId, PaginationUtils.pagination(page, limit));
+        Page<MonthlyInvoiceEntity> invoiceEntityPage = this.monthlyInvoiceRepository.findByApartment_Id(apartmentId, PaginationUtils.pagination(page, limit));
         return new PagedModel<>(invoiceEntityPage.map(monthlyInvoiceConvertor::entityToResponse));
     }
 }

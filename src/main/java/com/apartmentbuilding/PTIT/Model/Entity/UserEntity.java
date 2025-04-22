@@ -1,12 +1,12 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -19,7 +19,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity implements Serializable {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -47,6 +46,8 @@ public class UserEntity implements Serializable {
     private String phoneNumber;
     @Column(name = "identityNumber", unique = true)
     private String identityNumber;
+    @Column()
+    private String nationality;
 
     @ManyToOne
     @JoinColumn(name = "roleCode", referencedColumnName = "code")
@@ -57,10 +58,8 @@ public class UserEntity implements Serializable {
     private JwtEntity jwt;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     private List<ApartmentEntity> apartments;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @ManyToMany(mappedBy = "users")
     private List<NotificationEntity> notifications;
 }

@@ -23,7 +23,7 @@ public class FloorEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column()
     private String id;
-    @Column(name = "floorNumber", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Integer floorNumber;
     @Column()
     private String description;

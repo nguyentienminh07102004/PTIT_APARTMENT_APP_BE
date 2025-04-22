@@ -42,7 +42,9 @@ public enum ExceptionVariable {
 
     MONTHLY_INVOICE_NOT_FOUND(404, "Monthly invoice not found", HttpStatus.NOT_FOUND),
 
-    ELECTRIC_WATER_NOT_FOUND(404, "Electric water not found", HttpStatus.NOT_FOUND),
+    ELECTRIC_INVOICE_NOT_FOUND(404, "Electric invoice not found", HttpStatus.NOT_FOUND),
+
+    WATER_INVOICE_NOT_FOUND(404, "Water invoice not found", HttpStatus.NOT_FOUND),
 
     CODE_NOT_NULL_OR_EMPTY(400, "Code is not null or empty", HttpStatus.BAD_REQUEST),
     CODE_INVALID(400, "Code is invalid", HttpStatus.BAD_REQUEST ),
@@ -52,6 +54,8 @@ public enum ExceptionVariable {
     VEHICLE_TYPE_NOT_FOUND(404, "Vehicle type not found", HttpStatus.NOT_FOUND),
 
     VEHICLE_NOT_FOUND(404, "Vehicle not found", HttpStatus.NOT_FOUND),
+
+    FLOOR_NOT_FOUND(404, "Floor not found", HttpStatus.NOT_FOUND),
     ;
 
     private final Integer code;

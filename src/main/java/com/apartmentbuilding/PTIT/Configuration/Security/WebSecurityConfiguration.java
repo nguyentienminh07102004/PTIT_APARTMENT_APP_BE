@@ -13,10 +13,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -24,12 +27,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
+import java.util.function.Supplier;
 
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
@@ -54,11 +59,14 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/users/logout").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
                 .requestMatchers(HttpMethod.POST, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/forgot-password").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/token-valid").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/my-info")
-                .access(new WebExpressionAuthorizationManager("not isAnonymous()"))
-
-                .requestMatchers(HttpMethod.POST, "/electric/").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.POST, "/users/token-valid").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.GET, "/users/my-info").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.POST, "/electric/").access((authentication, object) -> {
+                    boolean isUser = authentication.get().getAuthorities()
+                            .stream()
+                            .anyMatch(role -> role.getAuthority().endsWith(ConstantConfig.USER_ROLE));
+                    return new AuthorizationDecision(!isUser);
+                })
                 .requestMatchers(HttpMethod.GET, "/electrics/apartment/{apartmentId}").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
 
                 .requestMatchers(HttpMethod.POST, "/apartments**").hasRole(ConstantConfig.ADMIN_ROLE)

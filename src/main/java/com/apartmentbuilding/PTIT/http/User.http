@@ -1,0 +1,43 @@
+POST localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+    "email": "nguyentienminhntm07102004@gmail.com",
+    "password": "2554"
+}
+
+###
+POST localhost:8080/api/users/register
+Content-Type: application/json
+
+{
+    "email": "nguyentienminhntm07102004@gmail.com",
+    "fullName": "{{$random.name.fullName}}",
+    "dateOfBirth": "{{$isoTimestamp}}",
+    "password": "25052004",
+    "confirmPassword": "25052004",
+    "identityNumber": "{{$random.idNumber.ssnValid}}",
+    "phoneNumber": "{{$random.phoneNumber.phoneNumber}}"
+}
+
+### forgot password
+POST localhost:8080/api/users/forgot-password
+Content-Type: application/json
+
+{
+    "email": "nguyentienminhntm07102004@gmail.com"
+}
+
+###
+PUT localhost:8080/api/users/forgot-password
+Content-Type: application/json
+
+{
+    "code": "05532d94-0fcc-4b95-ae98-1f00523e7635",
+    "newPassword": "123456789",
+    "confirmPassword": "123456789"
+}
+
+###
+POST localhost:8080/api/users/logout
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJCVUlMRElOR19NQU5BR0VSX1BUSVQiLCJzdWIiOiJjb25nZHVhbjI1NTRAZ21haWwuY29tIiwiZXhwIjoxNzQ1ODk4MTY0LCJqdGkiOiIwN2Q0NDAzOC1hZWM4LTRkNjgtYmY4MC0zYjQxYzliYTc2NDciLCJzY29wZSI6IlVTRVIifQ.7Hm0sGA7go2c9x3_Ux1FaldeB3kEBKnbKRGeALxjMJpA6TgCnf1TsANmL1eZK2_0f2gUpzF-vb2htCqKawSgYA

@@ -11,6 +11,7 @@ FROM openjdk:17-ea-oracle
 
 WORKDIR /app
 COPY --from=build /app/target/*.war app.war
+COPY smart-condo-e6e54-firebase-adminsdk-fbsvc-e10dd1c129.json smart-condo-e6e54-firebase-adminsdk-fbsvc-e10dd1c129.json
 EXPOSE 8080
 
 ENTRYPOINT ["java","-jar","app.war"]

@@ -4,7 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
-smart-condo-bb54b-firebase-adminsdk-fbsvc-df1600f5a8.json
+smart-condo-e6e54-firebase-adminsdk-fbsvc-e10dd1c129.json
+google-services.json
 
 ### STS ###
 .apt_generated

@@ -8,7 +8,6 @@ import com.apartmentbuilding.PTIT.Repository.INotificationRepository;
 import com.apartmentbuilding.PTIT.Service.User.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +21,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public NotificationResponse save(NotificationRequest notificationRequest) {
         NotificationEntity notification = this.notificationMapper.requestToEntity(notificationRequest);
-        notification.setUser(this.userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+//        notification.setUser(this.userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
         this.notificationRepository.save(notification);
         return this.notificationMapper.entityToResponse(notification);
     }

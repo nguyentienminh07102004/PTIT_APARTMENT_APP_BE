@@ -72,10 +72,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public JwtResponse login(UserLoginRequest request, String device) {
-        UserEntity user = userRepository.findByEmail(request.getEmail())
+        UserEntity user = this.userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.EMAIL_PASSWORD_NOT_MATCH));
-        if (request.getIsSocial() != null && !request.getIsSocial()) {
-            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (request.getIsSocial() == null || !request.getIsSocial()) {
+            if (!this.passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new DataInvalidException(ExceptionVariable.EMAIL_PASSWORD_NOT_MATCH);
             }
         }
@@ -93,7 +93,7 @@ public class UserServiceImpl implements IUserService {
         properties.add(OAuth2ParameterNames.CODE, userSocialLogin.getCode());
         WebClient webClient = WebClient.create();
         String accessToken = Objects.requireNonNull(webClient.method(HttpMethod.POST)
-                        .uri(accessTokenUrl)
+                        .uri(this.accessTokenUrl)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .body(BodyInserters.fromFormData(properties))
                         .retrieve()
@@ -102,7 +102,7 @@ public class UserServiceImpl implements IUserService {
                 .get(OAuth2ParameterNames.ACCESS_TOKEN)
                 .toString();
         String email = Objects.requireNonNull(webClient.method(HttpMethod.GET)
-                        .uri(userInfoUrl)
+                        .uri(this.userInfoUrl)
                         .header(HttpHeaders.AUTHORIZATION, ConstantConfig.AUTHORIZATION_PREFIX + accessToken)
                         .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                         .retrieve()
@@ -110,23 +110,23 @@ public class UserServiceImpl implements IUserService {
                         .block())
                 .get("email")
                 .toString();
-        if (userRepository.existsByEmail(email)) {
+        if (this.userRepository.existsByEmail(email)) {
             return this.login(new UserLoginRequest(email, null, true), device);
         }
         UserEntity user = UserEntity.builder()
                 .email(email)
-                .password(passwordEncoder.encode(UUID.randomUUID().toString()))
-                .role(roleService.findByCode(ConstantConfig.USER_ROLE))
+                .password(this.passwordEncoder.encode(UUID.randomUUID().toString()))
+                .role(this.roleService.findByCode(ConstantConfig.USER_ROLE))
                 .build();
         return getJwtResponse(device, user);
     }
 
     @Transactional
     public JwtResponse getJwtResponse(String device, UserEntity user) {
-        JwtDTO jwtDTO = jwtUtils.generateToken(user);
-        JwtEntity jwt = jwtUtils.toEntity(jwtDTO, device, user);
+        JwtDTO jwtDTO = this.jwtUtils.generateToken(user);
+        JwtEntity jwt = this.jwtUtils.toEntity(jwtDTO, device, user);
         user.setJwt(jwt);
-        userRepository.save(user);
+        this.userRepository.save(user);
         return new JwtResponse(jwt.getId(), jwtDTO.getToken(), jwt.getRefreshToken(), jwtDTO.getExpires(), jwt.getExpiry());
     }
 
@@ -134,7 +134,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional(readOnly = true)
     //@Cacheable(cacheNames = "getUserByEmail", key = "#email")
     public UserEntity getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.USER_NOT_FOUND));
     }
 
@@ -143,7 +143,7 @@ public class UserServiceImpl implements IUserService {
     //@Cacheable(cacheNames = "getMyInfo", key = "#authentication.name")
     public UserResponse getMyInfo(Authentication authentication) {
         String email = authentication.getName();
-        return userMapper.userEntityToUserResponse(this.getUserByEmail(email));
+        return this.userMapper.userEntityToUserResponse(this.getUserByEmail(email));
     }
 
     @Override
@@ -151,7 +151,7 @@ public class UserServiceImpl implements IUserService {
     public void changePassword(UserChangePasswordRequest userChangePasswordRequest) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = this.getUserByEmail(email);
-        if (!passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
+        if (!this.passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
             throw new DataInvalidException(ExceptionVariable.OLD_PASSWORD_NOT_CORRECT);
         }
         if (userChangePasswordRequest.getNewPassword().equals(userChangePasswordRequest.getOldPassword())) {
@@ -160,11 +160,11 @@ public class UserServiceImpl implements IUserService {
         if (!userChangePasswordRequest.getConfirmPassword().equals(userChangePasswordRequest.getNewPassword())) {
             throw new DataInvalidException(ExceptionVariable.PASSWORD_CONFIRM_PASSWORD_NOT_MATCH);
         }
-        user.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+        user.setPassword(this.passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
         // logout user ra
         user.getJwt().setUser(null);
         user.setJwt(null);
-        userRepository.save(user);
+        this.userRepository.save(user);
     }
 
     @Override
@@ -174,14 +174,14 @@ public class UserServiceImpl implements IUserService {
             throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
         }
         token = token.substring(7);
-        JWTClaimsSet claimsSet = jwtUtils.verify(token);
+        JWTClaimsSet claimsSet = this.jwtUtils.verify(token);
         String tokenId = claimsSet.getJWTID();
-        JwtEntity jwt = jwtRepository.findById(tokenId)
+        JwtEntity jwt = this.jwtRepository.findById(tokenId)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.TOKEN_INVALID));
         UserEntity user = jwt.getUser();
         jwt.setUser(null);
         user.setJwt(null);
-        userRepository.save(user);
+        this.userRepository.save(user);
     }
 
     @Override
@@ -194,11 +194,11 @@ public class UserServiceImpl implements IUserService {
         if (StringUtils.hasText(userRegister.getRoleCode())) {
             roleCode = userRegister.getRoleCode();
         }
-        RoleEntity role = roleService.findByCode(roleCode);
-        UserEntity userEntity = userMapper.userRegisterToUserEntity(userRegister);
+        RoleEntity role = this.roleService.findByCode(roleCode);
+        UserEntity userEntity = this.userMapper.userRegisterToUserEntity(userRegister);
         userEntity.setRole(role);
-        userEntity.setPassword(passwordEncoder.encode(userRegister.getPassword()));
-        userRepository.save(userEntity);
+        userEntity.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
+        this.userRepository.save(userEntity);
         return userMapper.userEntityToUserResponse(userEntity);
     }
 
@@ -223,7 +223,7 @@ public class UserServiceImpl implements IUserService {
             throw new DataInvalidException(ExceptionVariable.USER_NOT_FOUND);
         }
         this.codeForgotPasswordService.setCodeForgotPassword(new CodeForgotPassword(code, email));
-        this.sendEmailUtils.sendEmail(email, "Forgot Password", "forgotPassword", properties);
+        this.sendEmailUtils.sendEmail(email, "Forgot Password", "ForgotPassword", properties);
     }
 
     @Override
@@ -241,32 +241,32 @@ public class UserServiceImpl implements IUserService {
         if (passwordEncoder.matches(userForgotPassword.getNewPassword(), user.getPassword())) {
             throw new DataInvalidException(ExceptionVariable.OLD_PASSWORD_NEW_PASSWORD_MATCH);
         }
-        user.setPassword(passwordEncoder.encode(userForgotPassword.getNewPassword()));
+        user.setPassword(this.passwordEncoder.encode(userForgotPassword.getNewPassword()));
         user.setJwt(null);
         this.codeForgotPasswordService.deleteCodeForgotPassword(userForgotPassword.getCode());
         userRepository.save(user);
     }
 
-    @Override
-    @Transactional
-    public JwtResponse validateToken(TokenRequest tokenRequest, String device) {
-        JWTClaimsSet jwtClaimsSet = jwtUtils.verify(tokenRequest.getToken());
-        if (jwtClaimsSet.getExpirationTime().after(new Date(System.currentTimeMillis()))) {
-            return new JwtResponse(jwtClaimsSet.getJWTID(), tokenRequest.getToken(), tokenRequest.getRefreshToken(), jwtClaimsSet.getExpirationTime(), null);
-        }
-        JwtEntity jwtEntity = jwtRepository.findById(jwtClaimsSet.getJWTID()).orElse(null);
-        if (jwtEntity != null) {
-            if (jwtEntity.getExpiry().before(new Date(System.currentTimeMillis()))) {
-                throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
-            }
-            UserEntity user = jwtEntity.getUser();
-            user.getJwt().setUser(null);
-            user.setJwt(null);
-            jwtRepository.delete(user.getJwt());
-            return this.getJwtResponse(device, user);
-        }
-        throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
-    }
+//    @Override
+//    @Transactional
+//    public JwtResponse validateToken(TokenRequest tokenRequest, String device) {
+//        JWTClaimsSet jwtClaimsSet = this.jwtUtils.verify(tokenRequest.getToken());
+//        if (jwtClaimsSet.getExpirationTime().after(new Date(System.currentTimeMillis()))) {
+//            return new JwtResponse(jwtClaimsSet.getJWTID(), tokenRequest.getToken(), tokenRequest.getRefreshToken(), jwtClaimsSet.getExpirationTime(), null);
+//        }
+//        JwtEntity jwtEntity = this.jwtRepository.findById(jwtClaimsSet.getJWTID()).orElse(null);
+//        if (jwtEntity != null) {
+//            if (jwtEntity.getExpiry().before(new Date(System.currentTimeMillis()))) {
+//                throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
+//            }
+//            UserEntity user = jwtEntity.getUser();
+//            user.getJwt().setUser(null);
+//            user.setJwt(null);
+//            this.jwtRepository.delete(user.getJwt());
+//            return this.getJwtResponse(device, user);
+//        }
+//        throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
+//    }
 
 
     @Scheduled(cron = "@daily")

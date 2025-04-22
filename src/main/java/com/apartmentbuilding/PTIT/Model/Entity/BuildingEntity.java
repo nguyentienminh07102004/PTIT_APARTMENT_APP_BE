@@ -35,11 +35,11 @@ public class BuildingEntity {
     @Column()
     private String address;
     @Column()
-    @Temporal(TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
     private Date buildAt;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @Column(name = "unitNumber", columnDefinition = "double precision")
+    @Column(columnDefinition = "double precision")
     private Double unitNumber;
 
     @OneToMany(mappedBy = "building")

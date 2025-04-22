@@ -23,7 +23,7 @@ public class IBuildingServiceImpl implements IBuildingService {
     @Override
     @Transactional(readOnly = true)
     public BuildingEntity findById(String id) {
-        return buildingRepository.findById(id)
+        return this.buildingRepository.findById(id)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.BUILDING_NOT_FOUND));
     }
 

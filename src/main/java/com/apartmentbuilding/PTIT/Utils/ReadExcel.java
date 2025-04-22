@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Utils;
 
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ReadExcel<T> {
-    @SuppressWarnings(value = {"unchecked", "rawtypes"})
-    public List<T> readExcel(MultipartFile excelFile, int sheetNumber, Class<T> tClass) {
+public class ReadExcel {
+    public <T> List<T> readExcel(MultipartFile excelFile, int sheetNumber, Class<T> tClass) {
         try {
             InputStream inputStream = excelFile.getInputStream();
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -76,7 +75,7 @@ public class ReadExcel<T> {
                 for (Field field : fields) {
                     field.setAccessible(true);
                     String fieldName = field.getName().strip().toLowerCase();
-                    Integer columnIndex = headerExcelFile.get(fieldName);
+                    Integer columnIndex = headerExcelFile.getOrDefault(fieldName, null);
                     if (columnIndex == null) {
                         throw new DataInvalidException(ExceptionVariable.FILE_EXCEL_NAME_INVALID);
                     }

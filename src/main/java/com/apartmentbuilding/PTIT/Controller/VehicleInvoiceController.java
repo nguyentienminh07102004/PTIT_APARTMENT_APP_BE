@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Controller;
 
 import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
-import com.apartmentbuilding.PTIT.Model.Entity.VehicleInvoiceEntity;
-import com.apartmentbuilding.PTIT.Service.VehicleInvoice.IVehicleInvoiceService;
+import com.apartmentbuilding.PTIT.Model.Entity.ParkingInvoiceEntity;
+import com.apartmentbuilding.PTIT.Service.ParkingInvoice.IParkingInvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(value = "/vehicle-invoice")
 public class VehicleInvoiceController {
-    private final IVehicleInvoiceService vehicleInvoiceService;
+    private final IParkingInvoiceService vehicleInvoiceService;
 
-    @PostMapping(value = "/")
-    public ResponseEntity<List<VehicleInvoiceEntity>> save(@RequestParam MultipartFile file) {
-        List<VehicleInvoiceEntity> vehicleInvoiceEntities = vehicleInvoiceService.save(file);
+    @PostMapping()
+    public ResponseEntity<List<ParkingInvoiceEntity>> save(@RequestParam MultipartFile file) {
+        List<ParkingInvoiceEntity> vehicleInvoiceEntities = vehicleInvoiceService.save(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(vehicleInvoiceEntities);
     }
 

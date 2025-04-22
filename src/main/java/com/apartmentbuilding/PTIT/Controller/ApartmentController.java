@@ -26,7 +26,7 @@ import java.util.List;
 public class ApartmentController {
     private final IApartmentService apartmentService;
 
-    @PostMapping(value = "/")
+    @PostMapping()
     public ResponseEntity<ApartmentResponse> save(@Valid @RequestBody ApartmentRequest request) {
         ApartmentResponse apartmentResponse = this.apartmentService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(apartmentResponse);
@@ -38,7 +38,7 @@ public class ApartmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apartmentResponse);
     }
 
-    @GetMapping(value = "/")
+    @GetMapping()
     public ResponseEntity<PagedModel<ApartmentResponse>> findAllApartments(@ModelAttribute ApartmentSearchRequest request) {
         PagedModel<ApartmentResponse> apartmentResponsePagedModel = this.apartmentService.findAll(request);
         return ResponseEntity.status(HttpStatus.OK).body(apartmentResponsePagedModel);

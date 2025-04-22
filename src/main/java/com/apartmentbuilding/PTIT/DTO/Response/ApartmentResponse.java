@@ -16,7 +16,7 @@ public class ApartmentResponse {
     private String name;
     private String description;
     private Double area;
-    private Integer floor;
-    private BuildingResponse building;
+    private String floorId;
+    private String buildingId;
 
 }

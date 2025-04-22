@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
+import com.apartmentbuilding.PTIT.Common.Enum.PaymentMethod;
 import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
-import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +18,16 @@ import java.util.List;
 @Builder
 public class MonthlyInvoiceResponse {
     private String id;
-    private ApartmentEntity apartment;
-    private Date paidDate;
+    private String apartmentName;
+    private Date paymentDate;
     private String billingTime;
+    private Date dueDate;
+    private PaymentMethod method;
     private Date createdDate;
     private PaymentStatus status;
     private ElectricInvoiceResponse electricInvoice;
     private WaterInvoiceResponse waterInvoice;
     private List<VehicleInvoiceResponse> vehicleInvoices;
+    private List<ServiceInvoiceResponse> serviceInvoices;
     private Double totalPrice;
 }

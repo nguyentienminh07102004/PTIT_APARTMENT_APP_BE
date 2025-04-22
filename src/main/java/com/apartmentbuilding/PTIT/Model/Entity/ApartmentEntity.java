@@ -21,7 +21,6 @@ import java.util.List;
 @Getter
 @Setter
 @Checks(value = {
-        @Check(constraints = "floor > 0"),
         @Check(constraints = "area > 0")
 })
 public class ApartmentEntity {
@@ -29,7 +28,7 @@ public class ApartmentEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column()
     private String id;
-    @Column()
+    @Column(unique = true, nullable = false)
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -45,4 +44,10 @@ public class ApartmentEntity {
 
     @OneToMany(mappedBy = "apartment")
     private List<BookingEntity> bookings;
+
+    @OneToMany(mappedBy = "apartment")
+    private List<VehicleEntity> vehicles;
+
+    @OneToMany(mappedBy = "apartment")
+    private List<MonthlyInvoiceEntity> monthlyInvoices;
 }

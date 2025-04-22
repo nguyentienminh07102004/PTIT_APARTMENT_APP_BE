@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UserForgotPasswordSendEmail {
-    @Email(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "EMAIL_INVALID")
+    @Email(message = "EMAIL_INVALID")
     private String email;
 }

@@ -1,6 +1,7 @@
 package com.apartmentbuilding.PTIT.Service.CodeForgotPassword;
 
 import com.apartmentbuilding.PTIT.Configuration.Redis.BaseRedisRepositoryImpl;
+import com.apartmentbuilding.PTIT.Configuration.Redis.IBaseRedisRepository;
 import com.apartmentbuilding.PTIT.Model.RedisHash.CodeForgotPassword;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;

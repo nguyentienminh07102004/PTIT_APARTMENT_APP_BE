@@ -1,7 +1,8 @@
+name: "BuildingManager"
 services:
     postgres:
         image: postgres:17.3
-        container_name: buildingmanager_postgres
+        container_name: BuildingManagerPostgres
         restart: always
         environment:
             POSTGRES_PASSWORD: 123
@@ -11,25 +12,29 @@ services:
             - "5432:5432"
     redis:
         image: redis:latest
-        container_name: buildingmanager_redis
+        container_name: BuildingManagerRedis
         restart: always
         ports:
             - "6379:6379"
     mongodb:
         image: mongodb/mongodb-community-server:5.0.2-ubuntu2004
-        container_name: buildingmanager_mongodb
+        container_name: BuildingManagerMongoDB
         restart: always
         ports:
             - "27017:27017"
     backend:
         image: nguyentienminh0710/buildingmanager:0.0.5
-        container_name: buildingmanager_be
+        container_name: BuildingManagerBackend
         restart: always
         env_file: ".env"
         environment:
-            postgres_host: postgres
-            postgres_port: 5432
-            redis_port: 6379
-            redis_host: buildingmanager_redis
+            POSTGRES_HOST: postgres
+            POSTGRES_PORT: 5432
+            REDIS_PORT: 6379
+            REDIS_HOST: redis
         ports:
             - "8080:8080"
+        depends_on:
+            - postgres
+            - redis
+            - mongodb

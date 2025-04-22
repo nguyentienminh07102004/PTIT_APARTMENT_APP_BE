@@ -33,6 +33,6 @@ public class VehicleEntity {
     private VehicleStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "type")
+    @JoinColumn(name = "typeId")
     private VehicleTypeEntity type;
 }

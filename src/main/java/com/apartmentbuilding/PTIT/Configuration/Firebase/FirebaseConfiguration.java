@@ -17,7 +17,7 @@ public class FirebaseConfiguration {
     FirebaseApp firebaseConfiguration() throws IOException {
         String pathToProjectDir = System.getProperty("user.dir");
         FileInputStream serviceAccount =
-                new FileInputStream(pathToProjectDir + File.separator + "smart-condo-bb54b-firebase-adminsdk-fbsvc-df1600f5a8.json");
+                new FileInputStream(pathToProjectDir + File.separator + "smart-condo-e6e54-firebase-adminsdk-fbsvc-e10dd1c129.json");
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();

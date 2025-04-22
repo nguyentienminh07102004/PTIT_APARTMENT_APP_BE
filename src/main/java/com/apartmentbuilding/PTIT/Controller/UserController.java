@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -82,8 +83,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/token-valid")
-    public ResponseEntity<JwtResponse> verifyToken(@Valid @RequestBody TokenRequest tokenRequest, HttpServletRequest httpServletRequest) {
-        JwtResponse jwtResponse = userService.validateToken(tokenRequest, httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
-        return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
+    public ResponseEntity<String> verifyToken(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+                                                   @RequestHeader(value = HttpHeaders.USER_AGENT) String device) {
+        return ResponseEntity.status(HttpStatus.OK).body("SUCCESS");
     }
 }
