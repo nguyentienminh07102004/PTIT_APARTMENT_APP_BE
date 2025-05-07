@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice;
+package com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleInvoiceRequest {
-    private String apartmentId;
-    private Double unitPrice;
+public class ElectricInvoiceSearch {
     private String billingTime;
-    private String licensePlate;
+    private String apartmentName;
+    private Integer page;
+    private Integer limit;
 }

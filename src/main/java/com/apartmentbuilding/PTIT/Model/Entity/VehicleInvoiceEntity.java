@@ -21,9 +21,9 @@ import org.hibernate.annotations.Checks;
 public class VehicleInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "unitPrice")
+    @Column()
     private Double unitPrice;
     @ManyToOne
     @JoinColumn(name = "monthlyInvoiceId")

@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ServiceInvoiceImpl implements IServiceInvoice {
-    /**
-     * @return
-     */
     @Override
     public ServiceInvoiceResponse save(ServiceInvoiceRequest request) {
         return null;

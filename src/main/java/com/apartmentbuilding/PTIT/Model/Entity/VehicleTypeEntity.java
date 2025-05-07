@@ -19,11 +19,11 @@ import java.util.List;
 public class VehicleTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
-    @Column(name = "unitPrice")
+    @Column()
     private Double unitPrice;
     @OneToMany(mappedBy = "type")
     private List<VehicleEntity> vehicles;

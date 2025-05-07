@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.DTO.Request.ElectrictWater;
+package com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WaterRequest {
-    private Integer currentNumber;
+public class ParkingInvoiceRequest {
+    private String apartmentName;
     private Double unitPrice;
     private String billingTime;
-    private String apartmentId;
+    private String licensePlate;
 }

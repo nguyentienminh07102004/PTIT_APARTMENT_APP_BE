@@ -53,6 +53,8 @@ public class AmenityEntity {
     private Date lastMaintenanceDate;
     @Column()
     private String notes;
+    @Column()
+    private Boolean isBookable = false;
 //    @ElementCollection
 //    @CollectionTable(name = "amenity_unavailable_slots", joinColumns = @JoinColumn(name = "amenity_id"))
 //    @Column(name = "unavailable_slot")

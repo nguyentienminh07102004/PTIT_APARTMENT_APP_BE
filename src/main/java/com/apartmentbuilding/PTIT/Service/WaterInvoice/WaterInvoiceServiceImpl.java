@@ -37,11 +37,12 @@ public class WaterInvoiceServiceImpl implements IWaterInvoiceService {
     public WaterInvoiceResponse save(WaterInvoiceRequest request) {
         WaterInvoiceEntity waterInvoice = this.waterMapper.requestToEntity(request);
         String billingTime = request.getBillingTime(); // format: MM/YYYY
-        ApartmentEntity apartment = this.apartmentService.findById(request.getApartmentId());
-        MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Id(billingTime, request.getApartmentId());
+        ApartmentEntity apartment = this.apartmentService.findByName(request.getApartmentName());
+        MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Name(billingTime, request.getApartmentName());
         if (monthlyInvoice == null) {
             monthlyInvoice = this.monthlyInvoiceService.save(MonthlyInvoiceEntity.builder()
                     .apartment(apartment)
+                    .billingTime(billingTime)
                     .build());
         }
         waterInvoice.setMonthlyInvoice(monthlyInvoice);

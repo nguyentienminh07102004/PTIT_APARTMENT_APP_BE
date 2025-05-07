@@ -43,4 +43,10 @@ public class ApartmentController {
         PagedModel<ApartmentResponse> apartmentResponsePagedModel = this.apartmentService.findAll(request);
         return ResponseEntity.status(HttpStatus.OK).body(apartmentResponsePagedModel);
     }
+
+    @GetMapping(value = "/my-apartments")
+    public ResponseEntity<List<ApartmentResponse>> findMyApartments() {
+        List<ApartmentResponse> myApartments = this.apartmentService.findMyApartment();
+        return ResponseEntity.status(HttpStatus.OK).body(myApartments);
+    }
 }

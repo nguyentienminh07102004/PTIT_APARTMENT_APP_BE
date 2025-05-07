@@ -12,9 +12,15 @@ import java.util.List;
 public interface IApartmentService {
     ApartmentEntity findById(String id);
 
+    ApartmentEntity findByName(String name);
+
     ApartmentResponse save(ApartmentRequest apartmentRequest);
 
     List<ApartmentResponse> saveFromExcel(MultipartFile file);
 
     PagedModel<ApartmentResponse> findAll(ApartmentSearchRequest apartmentSearchRequest);
+
+    List<ApartmentResponse> findMyApartment();
+
+    Long countApartment();
 }

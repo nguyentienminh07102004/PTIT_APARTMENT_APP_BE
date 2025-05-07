@@ -40,8 +40,8 @@ public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
 
     @Override
     @Transactional(readOnly = true)
-    public MonthlyInvoiceEntity findByBillingTimeAndApartment_Id(String billingTime, String apartmentId) {
-        return this.monthlyInvoiceRepository.findByBillingTimeAndApartment_Id(billingTime, apartmentId);
+    public MonthlyInvoiceEntity findByBillingTimeAndApartment_Name(String billingTime, String apartmentName) {
+        return this.monthlyInvoiceRepository.findByBillingTimeAndApartment_Name(billingTime, apartmentName);
     }
 
     @Override

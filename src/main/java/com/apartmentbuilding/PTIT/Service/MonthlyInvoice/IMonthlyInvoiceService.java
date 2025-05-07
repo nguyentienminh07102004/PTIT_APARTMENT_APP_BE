@@ -11,7 +11,7 @@ public interface IMonthlyInvoiceService {
 
     MonthlyInvoiceEntity save(MonthlyInvoiceEntity monthlyInvoice);
 
-    MonthlyInvoiceEntity findByBillingTimeAndApartment_Id(String billingTime, String apartmentId);
+    MonthlyInvoiceEntity findByBillingTimeAndApartment_Name(String billingTime, String apartmentName);
 
     boolean existsByBillingTimeAndApartment_Id(String billingTime, String apartmentId);
 

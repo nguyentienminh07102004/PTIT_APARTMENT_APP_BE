@@ -15,12 +15,15 @@ public class ElectricConvertor {
     private final IMonthlyInvoiceRepository monthlyInvoiceRepository;
 
     public ElectricInvoiceResponse entityToResponse(ElectricInvoiceEntity entity) {
-        ElectricInvoiceResponse response = electricMapper.entityToResponse(entity);
-        response.setApartmentId(entity.getMonthlyInvoice().getApartment().getId());
+        ElectricInvoiceResponse response = this.electricMapper.entityToResponse(entity);
+        response.setApartmentName(entity.getMonthlyInvoice().getApartment().getName());
         String beforeBillingTime = BillingTimeUtils.getBillingTimeBefore(entity.getMonthlyInvoice().getBillingTime());
-        MonthlyInvoiceEntity beforeMonthlyInvoice = this.monthlyInvoiceRepository.findByBillingTimeAndApartment_Id(beforeBillingTime, entity.getMonthlyInvoice().getApartment().getId());
-        response.setBeforeNumber(beforeMonthlyInvoice.getElectricInvoice().getCurrentNumber());
+        MonthlyInvoiceEntity beforeMonthlyInvoice = this.monthlyInvoiceRepository.findByBillingTimeAndApartment_Name(beforeBillingTime, entity.getMonthlyInvoice().getApartment().getName());
+        if (beforeMonthlyInvoice == null) {
+            response.setBeforeNumber(0);
+        } else response.setBeforeNumber(beforeMonthlyInvoice.getElectricInvoice().getCurrentNumber());
         response.setTotal(response.getCurrentNumber() - response.getBeforeNumber());
+        response.setBillingTime(entity.getMonthlyInvoice().getBillingTime());
         response.setTotalPrice(response.getTotal() * response.getUnitPrice());
         return response;
     }

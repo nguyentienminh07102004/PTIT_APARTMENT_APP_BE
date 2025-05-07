@@ -14,13 +14,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ApartmentRequest {
-    private String id;
     @NotBlank(message = "APARTMENT_NAME_NOT_NULL_OR_EMPTY")
     @NotNull(message = "APARTMENT_NAME_NOT_NULL_OR_EMPTY")
     private String name;
     private String unitNumber;
     private String description;
     private Double area;
-    private Integer floor;
-    private String buildingId;
+    private String floorName;
 }

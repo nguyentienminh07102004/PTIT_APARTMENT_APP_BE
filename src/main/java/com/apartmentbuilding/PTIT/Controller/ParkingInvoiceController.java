@@ -19,13 +19,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/vehicle-invoice")
-public class VehicleInvoiceController {
-    private final IParkingInvoiceService vehicleInvoiceService;
+@RequestMapping(value = "/vehicle-invoices")
+public class ParkingInvoiceController {
+    private final IParkingInvoiceService parkingInvoiceService;
 
     @PostMapping()
     public ResponseEntity<List<ParkingInvoiceEntity>> save(@RequestParam MultipartFile file) {
-        List<ParkingInvoiceEntity> vehicleInvoiceEntities = vehicleInvoiceService.save(file);
+        List<ParkingInvoiceEntity> vehicleInvoiceEntities = this.parkingInvoiceService.save(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(vehicleInvoiceEntities);
     }
 
@@ -33,7 +33,7 @@ public class VehicleInvoiceController {
     public ResponseEntity<PagedModel<VehicleInvoiceResponse>> findByApartmentId(@PathVariable String apartmentId,
                                                          @RequestParam(required = false) Integer page,
                                                          @RequestParam(required = false) Integer limit) {
-        PagedModel<VehicleInvoiceResponse> result = vehicleInvoiceService.findByApartmentId(apartmentId, page, limit);
+        PagedModel<VehicleInvoiceResponse> result = this.parkingInvoiceService.findByApartmentId(apartmentId, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

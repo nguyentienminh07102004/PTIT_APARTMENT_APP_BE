@@ -15,5 +15,5 @@ public class ElectricInvoiceRequest {
     private Integer currentNumber;
     private Double unitPrice;
     private String billingTime;
-    private String apartmentId;
+    private String apartmentName;
 }

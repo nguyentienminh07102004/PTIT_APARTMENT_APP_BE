@@ -1,16 +1,14 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
-import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
-import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPasswordSendEmail;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserRegister;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
+import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.Service.User.IUserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,59 +30,57 @@ public class UserController {
     private final IUserService userService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
-        String device = httpServletRequest.getHeader(HttpHeaders.USER_AGENT);
-        JwtResponse jwtResponse = userService.login(request, device);
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody UserLoginRequest request,
+                                             @RequestHeader(value = HttpHeaders.USER_AGENT) String device) {
+        JwtResponse jwtResponse = this.userService.login(request, device);
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
     @PostMapping(value = "/login/google")
-    public ResponseEntity<JwtResponse> loginGoogle(@Valid @RequestBody UserSocialLogin request, HttpServletRequest httpServletRequest) {
-        String device = httpServletRequest.getHeader(HttpHeaders.USER_AGENT);
-        JwtResponse jwtResponse = userService.loginSocial(request, device);
+    public ResponseEntity<JwtResponse> loginGoogle(@Valid @RequestBody UserSocialLogin request,
+                                                   @RequestHeader(value = HttpHeaders.USER_AGENT) String device) {
+        JwtResponse jwtResponse = this.userService.loginSocial(request, device);
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        userService.logout(token);
+    public ResponseEntity<Void> logout(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+        this.userService.logout(token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping(value = "/my-info")
     public ResponseEntity<UserResponse> myInfo() {
-        UserResponse userResponse = userService.getMyInfo(SecurityContextHolder.getContext().getAuthentication());
+        UserResponse userResponse = this.userService.getMyInfo(SecurityContextHolder.getContext().getAuthentication());
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegister userRegister) {
-        UserResponse userResponse = userService.register(userRegister);
+        UserResponse userResponse = this.userService.register(userRegister);
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
     @PutMapping(value = "/change-password")
     public ResponseEntity<Void> changePassword(@Valid @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
-        userService.changePassword(userChangePasswordRequest);
+        this.userService.changePassword(userChangePasswordRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/forgot-password")
     public ResponseEntity<Void> sendEmailForgotPassword(@Valid @RequestBody UserForgotPasswordSendEmail userForgotPasswordSendEmail) {
-        userService.sendEmailForgotPassword(userForgotPasswordSendEmail.getEmail());
+        this.userService.sendEmailForgotPassword(userForgotPasswordSendEmail.getEmail());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping(value = "/forgot-password")
     public ResponseEntity<Void> verifyForgotPassword(@Valid @RequestBody UserForgotPassword userForgotPassword) {
-        userService.verifyCodeForgotPassword(userForgotPassword);
+        this.userService.verifyCodeForgotPassword(userForgotPassword);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/token-valid")
-    public ResponseEntity<String> verifyToken(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
-                                                   @RequestHeader(value = HttpHeaders.USER_AGENT) String device) {
+    public ResponseEntity<String> verifyToken() {
         return ResponseEntity.status(HttpStatus.OK).body("SUCCESS");
     }
 }

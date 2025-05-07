@@ -21,11 +21,11 @@ import java.util.List;
 public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "name")
+    @Column()
     private String name;
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @OneToMany(mappedBy = "role")

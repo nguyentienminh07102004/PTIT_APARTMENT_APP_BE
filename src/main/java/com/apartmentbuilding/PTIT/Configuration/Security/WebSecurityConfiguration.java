@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Configuration.Security;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +14,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -27,14 +25,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
-import java.util.function.Supplier;
 
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
@@ -61,18 +57,21 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/token-valid").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
                 .requestMatchers(HttpMethod.GET, "/users/my-info").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
-                .requestMatchers(HttpMethod.POST, "/electric/").access((authentication, object) -> {
+                .requestMatchers(HttpMethod.POST, "/electrics").access((authentication, object) -> {
                     boolean isUser = authentication.get().getAuthorities()
                             .stream()
                             .anyMatch(role -> role.getAuthority().endsWith(ConstantConfig.USER_ROLE));
                     return new AuthorizationDecision(!isUser);
                 })
-                .requestMatchers(HttpMethod.GET, "/electrics/apartment/{apartmentId}").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.GET, "/electrics/search-all").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.GET, "/electrics").hasAnyRole(ConstantConfig.ADMIN_ROLE, ConstantConfig.ACCOUNTING_ROLE)
 
-                .requestMatchers(HttpMethod.POST, "/apartments**").hasRole(ConstantConfig.ADMIN_ROLE)
-                .requestMatchers(HttpMethod.GET, "/apartments/").permitAll()
+                .requestMatchers(HttpMethod.POST, "/apartments").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/apartments").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/apartments/my-apartments").hasRole(ConstantConfig.USER_ROLE)
 
                 .requestMatchers(HttpMethod.GET, "/buildings").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/buildings").hasRole(ConstantConfig.ADMIN_ROLE)
 
                 .requestMatchers(HttpMethod.POST, "/requests/send-request").hasRole(ConstantConfig.USER_ROLE)
                 .requestMatchers(HttpMethod.GET, "/requests").hasRole(ConstantConfig.ADMIN_ROLE)
@@ -82,7 +81,6 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/ws**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
-        http.cors(cors -> corsFilter());
         http.oauth2ResourceServer(oauth2 ->
                 oauth2
                         .jwt(jwt -> jwt.decoder(jwtDecoder())
@@ -91,6 +89,7 @@ public class WebSecurityConfiguration {
                             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
                             httpServletResponse.getWriter().write(objectMapper.writeValueAsString(authException.getMessage()));
                         }));
+        http.cors(corsConfigurer -> corsFilter());
         return http.build();
     }
 

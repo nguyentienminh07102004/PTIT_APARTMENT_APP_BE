@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -42,11 +43,17 @@ public class ApartmentServiceImpl implements IApartmentService {
     }
 
     @Override
+    public ApartmentEntity findByName(String name) {
+        return this.apartmentRepository.findByName(name)
+                .orElseThrow(() -> new DataInvalidException(ExceptionVariable.APARTMENT_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
     public ApartmentResponse save(ApartmentRequest apartmentRequest) {
         ApartmentEntity apartment = this.apartmentMapper.requestToEntity(apartmentRequest);
-        if (StringUtils.hasText(apartmentRequest.getBuildingId())) {
-            FloorEntity floor = this.floorService.findById(apartmentRequest.getBuildingId());
+        if (StringUtils.hasText(apartmentRequest.getFloorName())) {
+            FloorEntity floor = this.floorService.findByName(apartmentRequest.getFloorName());
             apartment.setFloor(floor);
         }
         this.apartmentRepository.save(apartment);
@@ -71,5 +78,19 @@ public class ApartmentServiceImpl implements IApartmentService {
         Page<ApartmentEntity> apartmentEntities = this.apartmentRepository.findAll(pageable);
         Page<ApartmentResponse> apartmentResponses = apartmentEntities.map(apartmentConvertor::entityToResponse);
         return new PagedModel<>(apartmentResponses);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApartmentResponse> findMyApartment() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<ApartmentEntity> myApartments = this.apartmentRepository.findByUser_Email(email);
+        return myApartments.stream().map(apartmentConvertor::entityToResponse).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countApartment() {
+        return this.apartmentRepository.count();
     }
 }

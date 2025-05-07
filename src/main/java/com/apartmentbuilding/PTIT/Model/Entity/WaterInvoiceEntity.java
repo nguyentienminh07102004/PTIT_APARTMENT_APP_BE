@@ -18,11 +18,11 @@ import lombok.Setter;
 public class WaterInvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "unitPrice")
+    @Column()
     private Double unitPrice;
-    @Column(name = "currentNumber")
+    @Column()
     private Integer currentNumber;
 
     @OneToOne

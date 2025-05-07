@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 public class ElectricInvoiceResponse {
     private String id;
-    private String apartmentId;
+    private String apartmentName;
     private String billingTime;
     private Integer beforeNumber;
     private Integer currentNumber;

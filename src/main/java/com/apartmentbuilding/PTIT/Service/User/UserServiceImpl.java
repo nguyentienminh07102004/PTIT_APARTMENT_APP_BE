@@ -4,7 +4,6 @@ import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
 import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
-import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
@@ -246,28 +245,6 @@ public class UserServiceImpl implements IUserService {
         this.codeForgotPasswordService.deleteCodeForgotPassword(userForgotPassword.getCode());
         userRepository.save(user);
     }
-
-//    @Override
-//    @Transactional
-//    public JwtResponse validateToken(TokenRequest tokenRequest, String device) {
-//        JWTClaimsSet jwtClaimsSet = this.jwtUtils.verify(tokenRequest.getToken());
-//        if (jwtClaimsSet.getExpirationTime().after(new Date(System.currentTimeMillis()))) {
-//            return new JwtResponse(jwtClaimsSet.getJWTID(), tokenRequest.getToken(), tokenRequest.getRefreshToken(), jwtClaimsSet.getExpirationTime(), null);
-//        }
-//        JwtEntity jwtEntity = this.jwtRepository.findById(jwtClaimsSet.getJWTID()).orElse(null);
-//        if (jwtEntity != null) {
-//            if (jwtEntity.getExpiry().before(new Date(System.currentTimeMillis()))) {
-//                throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
-//            }
-//            UserEntity user = jwtEntity.getUser();
-//            user.getJwt().setUser(null);
-//            user.setJwt(null);
-//            this.jwtRepository.delete(user.getJwt());
-//            return this.getJwtResponse(device, user);
-//        }
-//        throw new DataInvalidException(ExceptionVariable.UNAUTHORIZED);
-//    }
-
 
     @Scheduled(cron = "@daily")
     @Transactional

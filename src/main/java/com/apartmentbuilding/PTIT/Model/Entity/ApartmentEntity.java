@@ -35,7 +35,7 @@ public class ApartmentEntity {
     @Column(columnDefinition = "double precision")
     private Double area;
     @ManyToOne
-    @JoinColumn(referencedColumnName = "floorNumber")
+    @JoinColumn(name = "floorName", referencedColumnName = "floorName")
     private FloorEntity floor;
 
     @ManyToOne

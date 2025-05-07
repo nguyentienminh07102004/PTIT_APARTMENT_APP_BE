@@ -1,13 +1,12 @@
 package com.apartmentbuilding.PTIT.Service.User;
 
-import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
-import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
-import com.apartmentbuilding.PTIT.DTO.Request.User.TokenRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserForgotPassword;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserLoginRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserRegister;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
+import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
 import org.springframework.security.core.Authentication;
 
@@ -23,5 +22,4 @@ public interface IUserService {
     boolean existByIdentityNumber(String identityNumber);
     void sendEmailForgotPassword(String email);
     void verifyCodeForgotPassword(UserForgotPassword userForgotPassword);
-    //JwtResponse validateToken(TokenRequest tokenRequest, String device);
 }

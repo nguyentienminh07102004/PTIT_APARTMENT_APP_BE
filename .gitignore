@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 .env
 smart-condo-e6e54-firebase-adminsdk-fbsvc-e10dd1c129.json
+smart-condo-bb54b-firebase-adminsdk-fbsvc-df1600f5a8.json
 google-services.json
 
 ### STS ###

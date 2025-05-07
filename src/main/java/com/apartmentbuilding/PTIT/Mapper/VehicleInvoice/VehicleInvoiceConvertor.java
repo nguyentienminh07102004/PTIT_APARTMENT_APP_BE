@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Mapper.VehicleInvoice;
 
-import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.VehicleInvoiceRequest;
+import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.ParkingInvoiceRequest;
 import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleInvoiceEntity;
@@ -14,7 +14,7 @@ public class VehicleInvoiceConvertor {
     private final IVehicleInvoiceMapper vehicleInvoiceMapper;
     private final IVehicleService vehicleService;
 
-    public VehicleInvoiceEntity requestToEntity(VehicleInvoiceRequest request, MonthlyInvoiceEntity monthlyInvoice) {
+    public VehicleInvoiceEntity requestToEntity(ParkingInvoiceRequest request, MonthlyInvoiceEntity monthlyInvoice) {
         VehicleInvoiceEntity entity = this.vehicleInvoiceMapper.requestToEntity(request);
         entity.setMonthlyInvoice(monthlyInvoice);
         entity.setVehicle(this.vehicleService.findByLicensePlate(request.getLicensePlate()));

@@ -32,19 +32,19 @@ import java.util.List;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
-    @Column(name = "password")
+    @Column()
     private String password;
-    @Column(name = "fullName")
+    @Column()
     private String fullName;
-    @Column(name = "dateOfBirth")
+    @Column()
     private Date dateOfBirth;
-    @Column(name = "phoneNumber")
+    @Column()
     private String phoneNumber;
-    @Column(name = "identityNumber", unique = true)
+    @Column(unique = true)
     private String identityNumber;
     @Column()
     private String nationality;

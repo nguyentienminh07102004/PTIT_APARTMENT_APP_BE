@@ -21,12 +21,12 @@ import lombok.Setter;
 public class VehicleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column()
     private String id;
     @ManyToOne
-    @JoinColumn(name = "apartmentId")
+    @JoinColumn()
     private ApartmentEntity apartment;
-    @Column(name = "licensePlate", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String licensePlate;
     @Column()
     @Enumerated(value = EnumType.STRING)

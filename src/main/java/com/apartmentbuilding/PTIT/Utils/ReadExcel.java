@@ -32,6 +32,7 @@ public class ReadExcel {
             Iterator<Row> rows = sheet.iterator();
             Map<String, Integer> headerExcelFile = new HashMap<>();
             List<T> result = new ArrayList<>();
+            Map<Integer, Object> headerObjectExcelFile = new HashMap<>();
             while (rows.hasNext()) {
                 Row row = rows.next();
                 if (row.getRowNum() == 0) {
@@ -41,56 +42,56 @@ public class ReadExcel {
                         // header file excel
                         headerExcelFile.put(this.convertHeaderExcelFile(cell.getStringCellValue()), cell.getColumnIndex());
                     }
-                }
-                Iterator<Cell> cells = row.cellIterator();
-                T t = tClass.getDeclaredConstructor().newInstance();
-                Map<Integer, Object> headerObjectExcelFile = new HashMap<>();
-                while (cells.hasNext()) {
-                    Cell cell = cells.next();
-                    Object data = switch (cell.getCellType()) {
-                        case BOOLEAN -> cell.getBooleanCellValue();
-                        case NUMERIC -> {
-                            if (DateUtil.isCellDateFormatted(cell)) {
-                                yield cell.getDateCellValue();
-                            } else {
-                                yield cell.getNumericCellValue();
+                } else {
+                    Iterator<Cell> cells = row.cellIterator();
+                    while (cells.hasNext()) {
+                        Cell cell = cells.next();
+                        Object data = switch (cell.getCellType()) {
+                            case BOOLEAN -> cell.getBooleanCellValue();
+                            case NUMERIC -> {
+                                if (DateUtil.isCellDateFormatted(cell)) {
+                                    yield cell.getDateCellValue();
+                                } else {
+                                    yield cell.getNumericCellValue();
+                                }
                             }
-                        }
-                        case STRING -> cell.getStringCellValue();
-                        case FORMULA -> {
-                            CellValue cellValue = workbook.getCreationHelper().createFormulaEvaluator().evaluate(cell);
-                            yield switch (cellValue.getCellType()) {
-                                case BOOLEAN -> cellValue.getBooleanValue();
-                                case NUMERIC -> cellValue.getNumberValue();
-                                case STRING -> cellValue.getStringValue();
-                                default -> null;
-                            };
-                        }
-                        default -> null;
-                    };
-                    headerObjectExcelFile.put(cell.getColumnIndex(), data);
-                }
-                // set value
-                Field[] fields = tClass.getDeclaredFields();
-                for (Field field : fields) {
-                    field.setAccessible(true);
-                    String fieldName = field.getName().strip().toLowerCase();
-                    Integer columnIndex = headerExcelFile.getOrDefault(fieldName, null);
-                    if (columnIndex == null) {
-                        throw new DataInvalidException(ExceptionVariable.FILE_EXCEL_NAME_INVALID);
+                            case STRING -> cell.getStringCellValue();
+                            case FORMULA -> {
+                                CellValue cellValue = workbook.getCreationHelper().createFormulaEvaluator().evaluate(cell);
+                                yield switch (cellValue.getCellType()) {
+                                    case BOOLEAN -> cellValue.getBooleanValue();
+                                    case NUMERIC -> cellValue.getNumberValue();
+                                    case STRING -> cellValue.getStringValue();
+                                    default -> null;
+                                };
+                            }
+                            default -> null;
+                        };
+                        headerObjectExcelFile.put(cell.getColumnIndex(), data);
                     }
-                    Object data = headerObjectExcelFile.get(columnIndex);
-                    if (field.getType().isEnum()) {
-                        field.set(t, Enum.valueOf((Class<Enum>) field.getType(), String.valueOf(data)));
-                    } else if (field.getType().equals(Integer.class)) {
-                        field.set(t, Double.valueOf(data.toString()).intValue());
-                    } else if (field.getType().equals(Long.class)) {
-                        field.set(t, Double.valueOf(data.toString()).longValue());
-                    } else {
-                        field.set(t, field.getClass().cast(data));
+                    // set value
+                    T t = tClass.getDeclaredConstructor().newInstance();
+                    Field[] fields = tClass.getDeclaredFields();
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+                        String fieldName = field.getName().strip().toLowerCase();
+                        Integer columnIndex = headerExcelFile.getOrDefault(fieldName, null);
+                        if (columnIndex == null) {
+                            throw new DataInvalidException(ExceptionVariable.FILE_EXCEL_NAME_INVALID);
+                        }
+                        Object data = headerObjectExcelFile.get(columnIndex);
+                        if (field.getType().isEnum()) {
+                            field.set(t, Enum.valueOf((Class<Enum>) field.getType(), String.valueOf(data)));
+                        } else if (field.getType().equals(Integer.class)) {
+                            field.set(t, Double.valueOf(data.toString()).intValue());
+                        } else if (field.getType().equals(Long.class)) {
+                            field.set(t, Double.valueOf(data.toString()).longValue());
+                        } else {
+                            field.set(t, field.getType().cast(data));
+                        }
                     }
+                    result.add(t);
                 }
-                result.add(t);
             }
             return result;
         } catch (IOException | InvocationTargetException | IllegalAccessException | InstantiationException |

@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Service.ParkingInvoice;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.VehicleInvoiceRequest;
+import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.ParkingInvoiceRequest;
 import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.ParkingInvoice.ParkingInvoiceConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
@@ -34,12 +34,13 @@ public class ParkingInvoiceServiceImpl implements IParkingInvoiceService {
 
     @Override
     @Transactional
-    public ParkingInvoiceEntity save(VehicleInvoiceRequest request) {
-        ApartmentEntity apartment = this.apartmentService.findById(request.getApartmentId());
-        MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Id(request.getBillingTime(), request.getApartmentId());
+    public ParkingInvoiceEntity save(ParkingInvoiceRequest request) {
+        ApartmentEntity apartment = this.apartmentService.findById(request.getApartmentName());
+        MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Name(request.getBillingTime(), request.getApartmentName());
         if (monthlyInvoice == null) {
             monthlyInvoice = this.monthlyInvoiceService.save(MonthlyInvoiceEntity.builder()
                     .apartment(apartment)
+                    .billingTime(request.getBillingTime())
                     .build());
         }
         ParkingInvoiceEntity packingInvoiceEntity = this.vehicleInvoiceConvertor.requestToEntity(request, monthlyInvoice);
@@ -50,9 +51,9 @@ public class ParkingInvoiceServiceImpl implements IParkingInvoiceService {
     @Override
     @Transactional
     public List<ParkingInvoiceEntity> save(MultipartFile file) {
-        List<VehicleInvoiceRequest> invoiceRequests = this.requestReadExcel.readExcel(file, ExcelSheetIndex.getSheetIndex(ConstantConfig.VEHICLE_TYPE), VehicleInvoiceRequest.class);
+        List<ParkingInvoiceRequest> invoiceRequests = this.requestReadExcel.readExcel(file, ExcelSheetIndex.getSheetIndex(ConstantConfig.VEHICLE_TYPE), ParkingInvoiceRequest.class);
         List<ParkingInvoiceEntity> result = new ArrayList<>();
-        for (VehicleInvoiceRequest invoiceRequest : invoiceRequests) {
+        for (ParkingInvoiceRequest invoiceRequest : invoiceRequests) {
             result.add(this.save(invoiceRequest));
         }
         return result;
