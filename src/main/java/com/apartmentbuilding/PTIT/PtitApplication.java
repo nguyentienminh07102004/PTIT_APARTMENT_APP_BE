@@ -14,7 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -30,7 +29,6 @@ import java.util.List;
 @EnableRedisRepositories
 @EnableScheduling
 @EnableAsync
-@EnableJpaAuditing
 @RequiredArgsConstructor
 public class PtitApplication {
     private final IRoleService roleService;
@@ -46,23 +44,10 @@ public class PtitApplication {
     @Transactional
     public CommandLineRunner commandLineRunner() {
         return args -> {
-            Thread thread1 = new Thread(() -> {
-                    if (!roleService.existsByCode(ConstantConfig.ADMIN_ROLE)) {
-                        this.roleService.save(new RoleEntity(ConstantConfig.ADMIN_ROLE, "Quản trị viên"));
-                    }
-                    if (!roleService.existsByCode(ConstantConfig.USER_ROLE)) {
-                        this.roleService.save(new RoleEntity(ConstantConfig.USER_ROLE, "Người dùng"));
-                    }
-                    if (!this.roleService.existsByCode(ConstantConfig.ACCOUNTING_ROLE)) {
-                        this.roleService.save(new RoleEntity(ConstantConfig.ACCOUNTING_ROLE, "Kế toán"));
-                    }
-            });
-            thread1.start();
-
             // building
             Thread thread2 = new Thread(() -> {
                 if (this.buildingService.isEmpty()) {
-                    for (int i = 0; i < 100; i++) {
+                    for (int i = 0; i < 10; i++) {
                         this.buildingService.save(BuildingEntity.builder()
                                 .address("Hà Nội")
                                 .name("B00%d".formatted(i + 1))
@@ -75,31 +60,37 @@ public class PtitApplication {
                 // floor
                 if (this.floorService.countOfFloors() == 0) {
                     for (BuildingEntity building : this.buildingService.findAll()) {
-                        Thread thread3 = new Thread(() -> {
-                            List<FloorEntity> floors = new ArrayList<>();
-                            for (int i = 0; i < 99; i++) {
-                                if (i < 10) {
-                                    floors.add(FloorEntity.builder()
-                                            .floorName("%s-B%02d".formatted(building.getName(), i + 1))
-                                            .description("Tầng B%02d toà %s".formatted(i + 1, building.getName()))
-                                            .building(building)
-                                            .build());
-                                } else {
-                                    floors.add(FloorEntity.builder()
-                                            .floorName("%s-%02d".formatted(building.getName(), i + 1))
-                                            .description("Tầng %02d toà %s".formatted(i + 1, building.getName()))
-                                            .building(building)
-                                            .build());
-                                }
+                        List<FloorEntity> floors = new ArrayList<>();
+                        for (int i = 0; i < 20; i++) {
+                            if (i < 2) {
+                                floors.add(FloorEntity.builder()
+                                        .floorName("%s-B%02d".formatted(building.getName(), i + 1))
+                                        .description("Tầng B%02d toà %s".formatted(i + 1, building.getName()))
+                                        .building(building)
+                                        .build());
+                            } else {
+                                floors.add(FloorEntity.builder()
+                                        .floorName("%s-%02d".formatted(building.getName(), i + 1))
+                                        .description("Tầng %02d toà %s".formatted(i + 1, building.getName()))
+                                        .building(building)
+                                        .build());
                             }
-                            this.floorService.saveAll(floors);
-                        });
-                        thread3.start();
+                        }
+                        this.floorService.saveAll(floors);
                     }
                 }
             });
             thread2.start();
             Thread thread4 = new Thread(() -> {
+                if (!roleService.existsByCode(ConstantConfig.ADMIN_ROLE)) {
+                    this.roleService.save(new RoleEntity(ConstantConfig.ADMIN_ROLE, "Quản trị viên"));
+                }
+                if (!roleService.existsByCode(ConstantConfig.USER_ROLE)) {
+                    this.roleService.save(new RoleEntity(ConstantConfig.USER_ROLE, "Người dùng"));
+                }
+                if (!this.roleService.existsByCode(ConstantConfig.ACCOUNTING_ROLE)) {
+                    this.roleService.save(new RoleEntity(ConstantConfig.ACCOUNTING_ROLE, "Kế toán"));
+                }
                 // user default
                 if (!this.userService.existEmail("thaiphuca1pdl@gmail.com")) {
                     this.userService.register(UserRegister.builder()

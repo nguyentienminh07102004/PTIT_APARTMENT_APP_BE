@@ -18,11 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MonthlyInvoiceController {
     private final IMonthlyInvoiceService monthlyInvoiceService;
 
-    @GetMapping(value = "/apartments/{apartmentId}")
-    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMonthlyInvoiceByApartmentId(@PathVariable String apartmentId,
+    @GetMapping(value = "/apartments/{apartmentName}")
+    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMonthlyInvoiceByApartmentId(@PathVariable String apartmentName,
                                                                        @RequestParam(required = false, defaultValue = "0") Integer page,
                                                                        @RequestParam(required = false, defaultValue = "10") Integer limit) {
-        PagedModel<MonthlyInvoiceResponse> monthInvoices = monthlyInvoiceService.findByApartment_Id(apartmentId, page, limit);
+        PagedModel<MonthlyInvoiceResponse> monthInvoices = this.monthlyInvoiceService.findByApartment_Name(apartmentName, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(monthInvoices);
+    }
+
+    @GetMapping(value = "/my-invoices")
+    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMyInvoice(@RequestParam(required = false) Integer page,
+                                                                            @RequestParam(required = false) Integer limit) {
+        PagedModel<MonthlyInvoiceResponse> invoiceResponses = this.monthlyInvoiceService.findMyInvoice(page, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceResponses);
     }
 }

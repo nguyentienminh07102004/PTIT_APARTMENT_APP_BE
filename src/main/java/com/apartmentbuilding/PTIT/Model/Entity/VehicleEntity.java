@@ -24,7 +24,7 @@ public class VehicleEntity {
     @Column()
     private String id;
     @ManyToOne
-    @JoinColumn()
+    @JoinColumn(name = "apartmentName", referencedColumnName = "name")
     private ApartmentEntity apartment;
     @Column(nullable = false, unique = true)
     private String licensePlate;
@@ -33,6 +33,6 @@ public class VehicleEntity {
     private VehicleStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "typeId")
+    @JoinColumn(name = "typeName", referencedColumnName = "name")
     private VehicleTypeEntity type;
 }

@@ -13,5 +13,6 @@ import lombok.Setter;
 @Builder
 public class ServiceInvoiceRequest {
     private String billingTime;
-    private String type;
+    private String typeName;
+    private String apartmentName;
 }

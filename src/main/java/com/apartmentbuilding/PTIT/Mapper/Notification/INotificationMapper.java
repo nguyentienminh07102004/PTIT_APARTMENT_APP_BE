@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Mapper.Notification;
 
 import com.apartmentbuilding.PTIT.DTO.Request.Notification.NotificationRequest;
-import com.apartmentbuilding.PTIT.DTO.Response.NotificationResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.Notification.NotificationResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.NotificationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

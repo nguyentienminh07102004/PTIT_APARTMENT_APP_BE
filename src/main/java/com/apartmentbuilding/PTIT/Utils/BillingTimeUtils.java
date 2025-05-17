@@ -8,4 +8,8 @@ public class BillingTimeUtils {
         LocalDate billingDateTimeBefore = LocalDate.of(Integer.parseInt(monthYear[1]), Integer.parseInt(monthYear[0]), 1).minusDays(1);
         return String.join("/", "%02d".formatted(billingDateTimeBefore.getMonth().getValue()), String.valueOf(billingDateTimeBefore.getYear()));
     }
+
+    public static boolean isBillingTime(String time) {
+        return time.matches("^(0?[1-9]|1[0-2])/([0-9]{4})$");
+    }
 }

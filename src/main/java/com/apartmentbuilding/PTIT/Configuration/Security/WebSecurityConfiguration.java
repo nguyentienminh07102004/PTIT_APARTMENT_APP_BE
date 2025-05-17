@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,6 +26,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -57,26 +59,36 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/token-valid").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
                 .requestMatchers(HttpMethod.GET, "/users/my-info").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
-                .requestMatchers(HttpMethod.POST, "/electrics").access((authentication, object) -> {
-                    boolean isUser = authentication.get().getAuthorities()
-                            .stream()
-                            .anyMatch(role -> role.getAuthority().endsWith(ConstantConfig.USER_ROLE));
-                    return new AuthorizationDecision(!isUser);
-                })
-                .requestMatchers(HttpMethod.GET, "/electrics/search-all").hasRole(ConstantConfig.USER_ROLE)
-                .requestMatchers(HttpMethod.GET, "/electrics").hasAnyRole(ConstantConfig.ADMIN_ROLE, ConstantConfig.ACCOUNTING_ROLE)
 
-                .requestMatchers(HttpMethod.POST, "/apartments").hasRole(ConstantConfig.ADMIN_ROLE)
-                .requestMatchers(HttpMethod.GET, "/apartments").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.POST, "/electrics").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.POST, "/electrics/read-excel").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.GET, "/electrics/search-all").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.GET, "/electrics").access(isNotUserAccess())
+
+                .requestMatchers(HttpMethod.GET, "/waters").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.POST, "/waters/read-excel").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.PUT, "/waters").access(isNotUserAccess())
+
+                .requestMatchers(HttpMethod.POST, "/apartments").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.GET, "/apartments").access(isNotUserAccess())
                 .requestMatchers(HttpMethod.GET, "/apartments/my-apartments").hasRole(ConstantConfig.USER_ROLE)
 
+                .requestMatchers(HttpMethod.GET, "/amenities").permitAll()
+
                 .requestMatchers(HttpMethod.GET, "/buildings").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/buildings").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.PUT, "/buildings").access(isNotUserAccess())
+
+                .requestMatchers(HttpMethod.POST, "/service-invoices").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.GET, "/service-invoices/all").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.GET, "/service-invoices/my-invoices").hasRole(ConstantConfig.USER_ROLE)
 
                 .requestMatchers(HttpMethod.POST, "/requests/send-request").hasRole(ConstantConfig.USER_ROLE)
-                .requestMatchers(HttpMethod.GET, "/requests").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/requests").access(isNotUserAccess())
 
-                .requestMatchers("/notifications/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/notifications").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/notifications").hasRole(ConstantConfig.ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/notifications/top-5-notifications").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.PUT, "/notifications/change-is-read/{notificationId}").hasRole(ConstantConfig.USER_ROLE)
 
                 .requestMatchers("/ws**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**").permitAll()
@@ -106,6 +118,16 @@ public class WebSecurityConfiguration {
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build()
                     .decode(token);
+        };
+    }
+
+    @Bean
+    public AuthorizationManager<RequestAuthorizationContext> isNotUserAccess() {
+        return (authentication, object) -> {
+            boolean isUser = authentication.get().getAuthorities()
+                    .stream()
+                    .anyMatch(role -> role.getAuthority().endsWith(ConstantConfig.USER_ROLE));
+            return new AuthorizationDecision(!isUser);
         };
     }
 

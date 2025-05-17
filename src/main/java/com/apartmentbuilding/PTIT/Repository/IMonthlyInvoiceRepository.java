@@ -10,5 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface IMonthlyInvoiceRepository extends JpaRepository<MonthlyInvoiceEntity, String> {
     MonthlyInvoiceEntity findByBillingTimeAndApartment_Name(String billingTime, String apartmentId);
     boolean existsByBillingTimeAndApartment_Id(String billingTime, String apartmentId);
-    Page<MonthlyInvoiceEntity> findByApartment_Id(String apartmentId, Pageable pageable);
+    Page<MonthlyInvoiceEntity> findByApartment_Name(String apartmentName, Pageable pagination);
+
+    Page<MonthlyInvoiceEntity> findDistinctByApartment_User_Email(String apartmentUserEmail, Pageable pagination);
 }

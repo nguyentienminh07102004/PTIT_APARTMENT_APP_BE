@@ -44,6 +44,9 @@ public enum ExceptionVariable {
 
     ELECTRIC_INVOICE_NOT_FOUND(404, "Electric invoice not found", HttpStatus.NOT_FOUND),
 
+    INVOICE_CURRENT_NOT_NULL(400, "Electric invoice current is not null", HttpStatus.BAD_REQUEST),
+    INVOICE_UNIT_PRICE_NOT_NULL(400, "Electric invoice unit price is not null", HttpStatus.BAD_REQUEST),
+
     WATER_INVOICE_NOT_FOUND(404, "Water invoice not found", HttpStatus.NOT_FOUND),
 
     CODE_NOT_NULL_OR_EMPTY(400, "Code is not null or empty", HttpStatus.BAD_REQUEST),
@@ -56,6 +59,18 @@ public enum ExceptionVariable {
     VEHICLE_NOT_FOUND(404, "Vehicle not found", HttpStatus.NOT_FOUND),
 
     FLOOR_NOT_FOUND(404, "Floor not found", HttpStatus.NOT_FOUND),
+
+    BILLING_TIME_NOT_NULL_OR_BLANK(400, "Billing time is not null or blank", HttpStatus.BAD_REQUEST),
+
+    STATUS_NOT_NULL(400, "Status not null", HttpStatus.BAD_REQUEST),
+
+    SERVICE_TYPE_NOT_FOUND(404, "Service type not found", HttpStatus.NOT_FOUND),
+
+    SERVICE_INVOICE_NOT_FOUND(404, "Service invoice not found", HttpStatus.NOT_FOUND),
+
+    LICENSE_PLATE_HAS_EXISTS(400, "License plate has exists", HttpStatus.BAD_REQUEST),
+
+    NOTIFICATION_NOT_FOUND(400, "Notification not found", HttpStatus.BAD_REQUEST),
     ;
 
     private final Integer code;

@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Mapper.ParkingInvoice;
 
-import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.ParkingInvoiceRequest;
-import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Request.ParkingInvoice.ParkingInvoiceRequest;
+import com.apartmentbuilding.PTIT.DTO.Response.ParkingInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.ParkingInvoiceEntity;
 import com.apartmentbuilding.PTIT.Service.Vehicle.IVehicleService;
@@ -21,9 +21,9 @@ public class ParkingInvoiceConvertor {
         return entity;
     }
 
-    public VehicleInvoiceResponse entityToResponse(ParkingInvoiceEntity entity) {
-        VehicleInvoiceResponse response = this.vehicleInvoiceMapper.entityToResponse(entity);
-        response.setApartmentId(entity.getMonthlyInvoice().getApartment().getId());
+    public ParkingInvoiceResponse entityToResponse(ParkingInvoiceEntity entity) {
+        ParkingInvoiceResponse response = this.vehicleInvoiceMapper.entityToResponse(entity);
+        response.setApartmentName(entity.getMonthlyInvoice().getApartment().getName());
         response.setBillingTime(entity.getMonthlyInvoice().getBillingTime());
         response.setLicensePlate(entity.getVehicle().getLicensePlate());
         return response;

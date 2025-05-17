@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +15,8 @@ import lombok.Setter;
 @Builder
 public class NotificationRequest {
     private String title;
-    private String description;
+    private String content;
+    private String image;
     private String type;
-    private String[] recipients;
+    private List<String> recipients;
 }

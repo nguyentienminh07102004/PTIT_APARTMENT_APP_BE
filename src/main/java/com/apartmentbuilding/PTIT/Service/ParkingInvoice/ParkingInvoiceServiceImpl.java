@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Service.ParkingInvoice;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.DTO.Request.VehicleInvoice.ParkingInvoiceRequest;
-import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Request.ParkingInvoice.ParkingInvoiceRequest;
+import com.apartmentbuilding.PTIT.DTO.Response.ParkingInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.ParkingInvoice.ParkingInvoiceConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
@@ -16,6 +16,7 @@ import com.apartmentbuilding.PTIT.Utils.ReadExcel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +36,7 @@ public class ParkingInvoiceServiceImpl implements IParkingInvoiceService {
     @Override
     @Transactional
     public ParkingInvoiceEntity save(ParkingInvoiceRequest request) {
-        ApartmentEntity apartment = this.apartmentService.findById(request.getApartmentName());
+        ApartmentEntity apartment = this.apartmentService.findByName(request.getApartmentName());
         MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Name(request.getBillingTime(), request.getApartmentName());
         if (monthlyInvoice == null) {
             monthlyInvoice = this.monthlyInvoiceService.save(MonthlyInvoiceEntity.builder()
@@ -61,9 +62,9 @@ public class ParkingInvoiceServiceImpl implements IParkingInvoiceService {
 
     @Override
     @Transactional(readOnly = true)
-    public PagedModel<VehicleInvoiceResponse> findByApartmentId(String apartmentId, Integer page, Integer limit) {
+    public PagedModel<ParkingInvoiceResponse> findByApartmentId(String apartmentId, Integer page, Integer limit) {
         Page<ParkingInvoiceEntity> entityPage = this.vehicleInvoiceRepository.findByMonthlyInvoice_Apartment_Id(apartmentId, PaginationUtils.pagination(page, limit));
-        Page<VehicleInvoiceResponse> responsePage = entityPage.map(vehicleInvoiceConvertor::entityToResponse);
+        Page<ParkingInvoiceResponse> responsePage = entityPage.map(vehicleInvoiceConvertor::entityToResponse);
         return new PagedModel<>(responsePage);
     }
 }

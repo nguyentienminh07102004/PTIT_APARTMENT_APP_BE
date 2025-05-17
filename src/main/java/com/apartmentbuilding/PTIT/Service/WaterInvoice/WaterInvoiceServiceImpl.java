@@ -4,20 +4,32 @@ import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
 import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.WaterInvoice.WaterInvoiceRequest;
+import com.apartmentbuilding.PTIT.DTO.Request.WaterInvoice.WaterInvoiceSearchRequest;
+import com.apartmentbuilding.PTIT.DTO.Request.WaterInvoice.WaterInvoiceUpdate;
 import com.apartmentbuilding.PTIT.DTO.Response.WaterInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.WaterInvoice.IWaterMapper;
 import com.apartmentbuilding.PTIT.Mapper.WaterInvoice.WaterConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity_;
+import com.apartmentbuilding.PTIT.Model.Entity.ElectricInvoiceEntity_;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity_;
 import com.apartmentbuilding.PTIT.Model.Entity.WaterInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.WaterInvoiceEntity_;
 import com.apartmentbuilding.PTIT.Repository.IWaterRepository;
 import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;
 import com.apartmentbuilding.PTIT.Service.MonthlyInvoice.IMonthlyInvoiceService;
 import com.apartmentbuilding.PTIT.Utils.ExcelSheetIndex;
+import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import com.apartmentbuilding.PTIT.Utils.ReadExcel;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -66,5 +78,44 @@ public class WaterInvoiceServiceImpl implements IWaterInvoiceService {
     public WaterInvoiceEntity findById(String id) {
         return this.waterRepository.findById(id)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.WATER_INVOICE_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedModel<WaterInvoiceResponse> findWaterInvoice(WaterInvoiceSearchRequest search) {
+        Pageable pageable = PaginationUtils.pagination(search.getPage(), search.getLimit());
+        Specification<WaterInvoiceEntity> specification = (root, query, builder) -> {
+            Predicate predicate = builder.conjunction();
+            if (StringUtils.hasText(search.getBillingTime())) {
+                predicate = builder.and(builder.equal(root.get(WaterInvoiceEntity_.MONTHLY_INVOICE)
+                        .get(MonthlyInvoiceEntity_.BILLING_TIME), search.getBillingTime()));
+            }
+            if (StringUtils.hasText(search.getApartmentName())) {
+                predicate = builder.and(builder.equal(root.get(WaterInvoiceEntity_.MONTHLY_INVOICE)
+                        .get(MonthlyInvoiceEntity_.APARTMENT)
+                        .get(ApartmentEntity_.NAME), search.getApartmentName()));
+            }
+            if (query != null) {
+                //query.distinct(true);
+                query.orderBy(
+                        builder.asc(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE).get(MonthlyInvoiceEntity_.BILLING_TIME)),
+                        builder.asc(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE).get(MonthlyInvoiceEntity_.APARTMENT).get(ApartmentEntity_.NAME))
+                );
+            }
+            return predicate;
+        };
+        return new PagedModel<>(this.waterRepository.findAll(specification, pageable)
+                .map(this.waterConvertor::entityToResponse));
+    }
+
+    @Override
+    @Transactional
+    public WaterInvoiceResponse updateWaterInvoice(WaterInvoiceUpdate request) {
+        WaterInvoiceEntity waterInvoice = this.findById(request.getId());
+        waterInvoice.setCurrentNumber(request.getCurrentNumber());
+        waterInvoice.setStatus(request.getStatus());
+        waterInvoice.setUnitPrice(request.getUnitPrice());
+        this.waterRepository.save(waterInvoice);
+        return this.waterConvertor.entityToResponse(waterInvoice);
     }
 }

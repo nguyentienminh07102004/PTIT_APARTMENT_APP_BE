@@ -37,7 +37,8 @@ public class ApartmentEntity {
     @ManyToOne
     @JoinColumn(name = "floorName", referencedColumnName = "floorName")
     private FloorEntity floor;
-
+    @Column()
+    private String image;
     @ManyToOne
     @JoinColumn(name = "userEmail", referencedColumnName = "email")
     private UserEntity user;

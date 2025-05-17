@@ -16,8 +16,8 @@ public class VehicleTypeServiceImpl implements IVehicleTypeService {
 
     @Override
     @Transactional(readOnly = true)
-    public VehicleTypeEntity findByName(String id) {
-        return this.vehicleTypeRepository.findByName(id)
+    public VehicleTypeEntity findByName(String name) {
+        return this.vehicleTypeRepository.findByName(name)
                 .orElseThrow(() -> new DataInvalidException(ExceptionVariable.VEHICLE_TYPE_NOT_FOUND));
     }
 }

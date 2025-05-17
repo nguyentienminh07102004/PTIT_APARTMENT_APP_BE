@@ -23,4 +23,9 @@ public class UserResponse implements Serializable {
     private String identityNumber;
     private Date dateOfBirth;
     private RoleEntity role;
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof UserResponse && ((UserResponse) obj).id.equals(this.id) && ((UserResponse) obj).email.equals(this.email);
+    }
 }

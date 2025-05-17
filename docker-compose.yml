@@ -16,12 +16,6 @@ services:
         restart: always
         ports:
             - "6379:6379"
-    mongodb:
-        image: mongodb/mongodb-community-server:5.0.2-ubuntu2004
-        container_name: BuildingManagerMongoDB
-        restart: always
-        ports:
-            - "27017:27017"
     backend:
         image: nguyentienminh0710/buildingmanager:0.0.5
         container_name: BuildingManagerBackend
@@ -37,4 +31,3 @@ services:
         depends_on:
             - postgres
             - redis
-            - mongodb

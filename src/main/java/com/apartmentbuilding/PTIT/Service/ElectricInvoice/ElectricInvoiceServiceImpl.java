@@ -5,6 +5,7 @@ import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice.ElectricInvoiceRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice.ElectricInvoiceSearch;
+import com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice.ElectricInvoiceUpdate;
 import com.apartmentbuilding.PTIT.DTO.Response.ElectricInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.ElectricInvoice.ElectricConvertor;
 import com.apartmentbuilding.PTIT.Mapper.ElectricInvoice.IElectricMapper;
@@ -17,6 +18,7 @@ import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity_;
 import com.apartmentbuilding.PTIT.Repository.IElectricRepository;
 import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;
 import com.apartmentbuilding.PTIT.Service.MonthlyInvoice.IMonthlyInvoiceService;
+import com.apartmentbuilding.PTIT.Utils.BillingTimeUtils;
 import com.apartmentbuilding.PTIT.Utils.ExcelSheetIndex;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import com.apartmentbuilding.PTIT.Utils.ReadExcel;
@@ -63,6 +65,17 @@ public class ElectricInvoiceServiceImpl implements IElectricInvoiceService {
     }
 
     @Override
+    @Transactional
+    public ElectricInvoiceResponse updateInvoice(ElectricInvoiceUpdate invoiceUpdate) {
+        ElectricInvoiceEntity invoice = this.findById(invoiceUpdate.getId());
+        invoice.setCurrentNumber(invoiceUpdate.getCurrentNumber());
+        invoice.setUnitPrice(invoiceUpdate.getUnitPrice());
+        invoice.setStatus(invoiceUpdate.getStatus());
+        this.electricRepository.save(invoice);
+        return this.electricConvertor.entityToResponse(invoice);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ElectricInvoiceEntity findById(String id) {
         return this.electricRepository.findById(id)
@@ -97,7 +110,7 @@ public class ElectricInvoiceServiceImpl implements IElectricInvoiceService {
                 String[] dateYear = search.split("/");
                 predicates.add(criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
                         .get(MonthlyInvoiceEntity_.BILLING_TIME), String.join("/", dateYear[1], dateYear[2])));
-            } else if (search.matches("^(0?[1-9]|1[0-2])/([0-9]{4})$")) {
+            } else if (BillingTimeUtils.isBillingTime(search)) {
                 predicates.add(criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
                         .get(MonthlyInvoiceEntity_.BILLING_TIME), search));
             } else {

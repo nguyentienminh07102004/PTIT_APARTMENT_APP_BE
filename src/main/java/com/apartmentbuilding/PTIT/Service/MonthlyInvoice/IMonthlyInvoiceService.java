@@ -15,5 +15,7 @@ public interface IMonthlyInvoiceService {
 
     boolean existsByBillingTimeAndApartment_Id(String billingTime, String apartmentId);
 
-    PagedModel<MonthlyInvoiceResponse> findByApartment_Id(String apartmentId, Integer page, Integer limit);
+    PagedModel<MonthlyInvoiceResponse> findByApartment_Name(String apartmentName, Integer page, Integer limit);
+
+    PagedModel<MonthlyInvoiceResponse> findMyInvoice(Integer page, Integer limit);
 }

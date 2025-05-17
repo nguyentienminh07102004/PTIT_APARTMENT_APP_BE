@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Controller;
 
-import com.apartmentbuilding.PTIT.DTO.Response.VehicleInvoiceResponse;
+import com.apartmentbuilding.PTIT.DTO.Response.ParkingInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.ParkingInvoiceEntity;
 import com.apartmentbuilding.PTIT.Service.ParkingInvoice.IParkingInvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,10 @@ public class ParkingInvoiceController {
     }
 
     @GetMapping(value = "/apartments/{apartmentId}")
-    public ResponseEntity<PagedModel<VehicleInvoiceResponse>> findByApartmentId(@PathVariable String apartmentId,
-                                                         @RequestParam(required = false) Integer page,
-                                                         @RequestParam(required = false) Integer limit) {
-        PagedModel<VehicleInvoiceResponse> result = this.parkingInvoiceService.findByApartmentId(apartmentId, page, limit);
+    public ResponseEntity<PagedModel<ParkingInvoiceResponse>> findByApartmentId(@PathVariable String apartmentId,
+                                                                                @RequestParam(required = false) Integer page,
+                                                                                @RequestParam(required = false) Integer limit) {
+        PagedModel<ParkingInvoiceResponse> result = this.parkingInvoiceService.findByApartmentId(apartmentId, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

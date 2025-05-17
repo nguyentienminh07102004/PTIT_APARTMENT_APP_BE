@@ -1,7 +1,10 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
+import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +27,9 @@ public class WaterInvoiceEntity {
     private Double unitPrice;
     @Column()
     private Integer currentNumber;
+    @Column()
+    @Enumerated(value = EnumType.STRING)
+    private PaymentStatus status = PaymentStatus.UNPAID;
 
     @OneToOne
     @JoinColumn(name = "monthlyInvoiceId")

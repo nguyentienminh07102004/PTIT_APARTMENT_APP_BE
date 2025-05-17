@@ -18,5 +18,5 @@ public class ApartmentResponse {
     private Double area;
     private String floorName;
     private String buildingName;
-
+    private String image;
 }

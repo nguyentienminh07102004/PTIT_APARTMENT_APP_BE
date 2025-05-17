@@ -55,8 +55,4 @@ public class AmenityEntity {
     private String notes;
     @Column()
     private Boolean isBookable = false;
-//    @ElementCollection
-//    @CollectionTable(name = "amenity_unavailable_slots", joinColumns = @JoinColumn(name = "amenity_id"))
-//    @Column(name = "unavailable_slot")
-//    private List<String> unavailableSlots;
 }

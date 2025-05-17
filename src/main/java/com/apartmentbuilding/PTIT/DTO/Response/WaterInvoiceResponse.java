@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
+import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,5 @@ public class WaterInvoiceResponse {
     private Integer total;
     private Double unitPrice;
     private Double totalPrice;
+    private PaymentStatus status;
 }

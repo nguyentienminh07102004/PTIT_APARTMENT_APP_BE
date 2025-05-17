@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +30,7 @@ public class RoleEntity {
     private String code;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<UserEntity> users;
 
     public RoleEntity(String code, String name) {
