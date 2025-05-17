@@ -90,6 +90,8 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/notifications/top-5-notifications").hasRole(ConstantConfig.USER_ROLE)
                 .requestMatchers(HttpMethod.PUT, "/notifications/change-is-read/{notificationId}").hasRole(ConstantConfig.USER_ROLE)
 
+                .requestMatchers("/data-statistics/**").access(isNotUserAccess())
+
                 .requestMatchers("/ws**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());

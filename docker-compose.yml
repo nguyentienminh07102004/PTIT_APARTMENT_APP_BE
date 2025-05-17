@@ -17,7 +17,7 @@ services:
         ports:
             - "6379:6379"
     backend:
-        image: nguyentienminh0710/buildingmanager:0.0.5
+        image: nguyentienminh0710/buildingmanager:0.0.6
         container_name: BuildingManagerBackend
         restart: always
         env_file: ".env"

@@ -9,6 +9,8 @@ public interface IMonthlyInvoiceService {
 
     MonthlyInvoiceEntity findById(String id);
 
+    MonthlyInvoiceResponse findResponseById(String id);
+
     MonthlyInvoiceEntity save(MonthlyInvoiceEntity monthlyInvoice);
 
     MonthlyInvoiceEntity findByBillingTimeAndApartment_Name(String billingTime, String apartmentName);

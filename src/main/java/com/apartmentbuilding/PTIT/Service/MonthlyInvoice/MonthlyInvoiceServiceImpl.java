@@ -39,6 +39,12 @@ public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public MonthlyInvoiceResponse findResponseById(String id) {
+        return this.monthlyInvoiceConvertor.entityToResponse(this.findById(id));
+    }
+
+    @Override
     @Transactional
     public MonthlyInvoiceEntity save(MonthlyInvoiceEntity monthlyInvoice) {
         return this.monthlyInvoiceRepository.save(monthlyInvoice);

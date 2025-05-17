@@ -26,6 +26,11 @@ public class MonthlyInvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(monthInvoices);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<MonthlyInvoiceResponse> findById(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.monthlyInvoiceService.findResponseById(id));
+    }
+
     @GetMapping(value = "/my-invoices")
     public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMyInvoice(@RequestParam(required = false) Integer page,
                                                                             @RequestParam(required = false) Integer limit) {
