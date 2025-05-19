@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Controller;
 
+import com.apartmentbuilding.PTIT.DTO.Request.MonthInvoice.MonthInvoiceSearch;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Service.MonthlyInvoice.IMonthlyInvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,9 +34,8 @@ public class MonthlyInvoiceController {
     }
 
     @GetMapping(value = "/my-invoices")
-    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMyInvoice(@RequestParam(required = false) Integer page,
-                                                                            @RequestParam(required = false) Integer limit) {
-        PagedModel<MonthlyInvoiceResponse> invoiceResponses = this.monthlyInvoiceService.findMyInvoice(page, limit);
+    public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMyInvoice(@ModelAttribute MonthInvoiceSearch search) {
+        PagedModel<MonthlyInvoiceResponse> invoiceResponses = this.monthlyInvoiceService.findMyInvoice(search);
         return ResponseEntity.status(HttpStatus.OK).body(invoiceResponses);
     }
 }

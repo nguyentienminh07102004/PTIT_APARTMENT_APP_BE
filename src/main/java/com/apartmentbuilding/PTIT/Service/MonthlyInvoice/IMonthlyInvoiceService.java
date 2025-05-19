@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.MonthlyInvoice;
 
+import com.apartmentbuilding.PTIT.DTO.Request.MonthInvoice.MonthInvoiceSearch;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import org.springframework.data.web.PagedModel;
@@ -19,5 +20,5 @@ public interface IMonthlyInvoiceService {
 
     PagedModel<MonthlyInvoiceResponse> findByApartment_Name(String apartmentName, Integer page, Integer limit);
 
-    PagedModel<MonthlyInvoiceResponse> findMyInvoice(Integer page, Integer limit);
+    PagedModel<MonthlyInvoiceResponse> findMyInvoice(MonthInvoiceSearch search);
 }

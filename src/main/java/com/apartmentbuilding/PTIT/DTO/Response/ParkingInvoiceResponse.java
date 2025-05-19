@@ -19,4 +19,5 @@ public class ParkingInvoiceResponse {
     private String apartmentName;
     private String billingTime;
     private PaymentStatus status;
+    private String type;
 }

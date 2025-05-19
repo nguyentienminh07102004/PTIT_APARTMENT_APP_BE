@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class PaginationUtils {
     public static Pageable pagination(Integer page, Integer limit) {
-        if (page == null) page = 1;
-        if (limit == null) limit = 10;
+        if (page == null || page < 1) page = 1;
+        if (limit == null || limit < 0) limit = 10;
         return PageRequest.of(page - 1, limit);
     }
     public static Pageable pagination(Integer page, Integer limit, Map<String, Sort.Direction> sort) {
