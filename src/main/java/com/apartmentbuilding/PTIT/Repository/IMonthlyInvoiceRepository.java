@@ -16,11 +16,8 @@ public interface IMonthlyInvoiceRepository extends JpaRepository<MonthlyInvoiceE
     MonthlyInvoiceEntity findByBillingTimeAndApartment_Name(String billingTime, String apartmentId);
     boolean existsByBillingTimeAndApartment_Id(String billingTime, String apartmentId);
     Page<MonthlyInvoiceEntity> findByApartment_Name(String apartmentName, Pageable pagination);
-
-    Page<MonthlyInvoiceEntity> findDistinctByApartment_User_Email(String apartmentUserEmail, Pageable pagination);
-
     @Query(value = "select distinct m.billingTime from monthlyinvoice m order by m.billingTime limit :top", nativeQuery = true)
     List<String> findAllBillingTimeLast(@Param(value = "top") Integer top);
-
     Long countByBillingTime(String billingTime);
+    List<MonthlyInvoiceEntity> findTop6ByApartment_Name(String apartmentNames);
 }

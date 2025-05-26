@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.Common.Enum;
+package com.apartmentbuilding.PTIT.Common.Enums;
 
 public enum RequestType {
     REPAIR_AND_MAINTENANCE,

@@ -29,14 +29,16 @@ public class NotificationConvertor {
 
     public NotificationUserResponse toResponse(NotificationTargetEntity notification) {
         NotificationEntity notificationEntity = notification.getNotification();
-        return NotificationUserResponse.builder()
+        NotificationUserResponse notificationUserResponse = NotificationUserResponse.builder()
                 .id(notificationEntity.getId())
                 .title(notificationEntity.getTitle())
-                .content(notificationEntity.getContent())
+                .content(notificationEntity.getContent().replaceAll("\n", "<br />"))
                 .createdDate(notificationEntity.getCreatedDate())
                 .isRead(notification.getIsRead())
                 .sender(notificationEntity.getSender())
                 .build();
+        System.out.println(notificationUserResponse);
+        return notificationUserResponse;
     }
 
     public NotificationEntity toEntity(NotificationRequest notificationRequest) {

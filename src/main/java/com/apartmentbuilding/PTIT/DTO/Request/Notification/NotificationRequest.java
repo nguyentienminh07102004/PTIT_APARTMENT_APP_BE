@@ -17,6 +17,5 @@ public class NotificationRequest {
     private String title;
     private String content;
     private String image;
-    private String type;
     private List<String> recipients;
 }

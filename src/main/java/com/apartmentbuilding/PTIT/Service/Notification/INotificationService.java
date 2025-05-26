@@ -10,6 +10,7 @@ import java.util.List;
 public interface INotificationService {
     NotificationResponse save(NotificationRequest notificationRequest);
     List<NotificationUserResponse> findTop5NotificationNewest();
-    PagedModel<NotificationResponse> findAll(Integer page, Integer limit);
+    PagedModel<NotificationResponse> findAll(String search, Integer page, Integer limit);
     void changeNotificationIsRead(String notificationId);
+    PagedModel<NotificationUserResponse> findAllNotificationUsers(String search, Integer page, Integer limit);
 }

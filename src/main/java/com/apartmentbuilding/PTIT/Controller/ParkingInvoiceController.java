@@ -1,5 +1,6 @@
 package com.apartmentbuilding.PTIT.Controller;
 
+import com.apartmentbuilding.PTIT.DTO.Request.ParkingInvoice.ParkingInvoiceSearch;
 import com.apartmentbuilding.PTIT.DTO.Response.ParkingInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.ParkingInvoiceEntity;
 import com.apartmentbuilding.PTIT.Service.ParkingInvoice.IParkingInvoiceService;
@@ -8,6 +9,7 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +37,11 @@ public class ParkingInvoiceController {
                                                                                 @RequestParam(required = false) Integer limit) {
         PagedModel<ParkingInvoiceResponse> result = this.parkingInvoiceService.findByApartmentId(apartmentId, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping(value = "/my-invoices")
+    public ResponseEntity<PagedModel<ParkingInvoiceResponse>> findMyInvoiceSearch(@ModelAttribute ParkingInvoiceSearch parkingInvoiceSearch) {
+        PagedModel<ParkingInvoiceResponse> pagedModel = this.parkingInvoiceService.findParkingInvoice(parkingInvoiceSearch);
+        return ResponseEntity.status(HttpStatus.OK).body(pagedModel);
     }
 }

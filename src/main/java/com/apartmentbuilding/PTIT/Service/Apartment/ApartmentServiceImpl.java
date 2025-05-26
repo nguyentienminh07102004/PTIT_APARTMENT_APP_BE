@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.Apartment;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.Apartment.ApartmentSearchRequest;
@@ -89,8 +89,12 @@ public class ApartmentServiceImpl implements IApartmentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Long countApartment() {
-        return this.apartmentRepository.count();
+    public List<String> getAllApartmentNames() {
+        return this.apartmentRepository.findAllNames();
+    }
+
+    @Override
+    public List<String> getAllApartmentNameByUserEmail(String email) {
+        return this.apartmentRepository.findByApartmentNameByUserEmail(email);
     }
 }

@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.apartmentbuilding.PTIT.Common.Enum.VehicleStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.VehicleStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

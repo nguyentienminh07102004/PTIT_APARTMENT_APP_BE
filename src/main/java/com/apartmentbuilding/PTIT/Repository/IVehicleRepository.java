@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface IVehicleRepository extends JpaRepository<VehicleEntity, String> {
     Optional<VehicleEntity> findByLicensePlate(String licensePlate);
+
+    Boolean existsByLicensePlate(String licensePlate);
 }

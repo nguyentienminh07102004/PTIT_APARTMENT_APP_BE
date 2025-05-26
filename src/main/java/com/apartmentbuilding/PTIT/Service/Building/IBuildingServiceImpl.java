@@ -6,7 +6,7 @@ import com.apartmentbuilding.PTIT.DTO.Response.BuildingResponse;
 import com.apartmentbuilding.PTIT.Mapper.Building.IBuildingMapper;
 import com.apartmentbuilding.PTIT.Model.Entity.BuildingEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Repository.IBuildingRepository;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;

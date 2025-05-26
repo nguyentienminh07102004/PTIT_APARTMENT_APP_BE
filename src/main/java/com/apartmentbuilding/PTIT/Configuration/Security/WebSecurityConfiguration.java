@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Configuration.Security;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Utils.JwtUtils;
@@ -59,6 +59,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/users/forgot-password").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/token-valid").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
                 .requestMatchers(HttpMethod.GET, "/users/my-info").access(new WebExpressionAuthorizationManager("not isAnonymous()"))
+                .requestMatchers(HttpMethod.PUT, "/users/delete-token-user").hasRole(ConstantConfig.ADMIN_ROLE)
 
                 .requestMatchers(HttpMethod.POST, "/electrics").access(isNotUserAccess())
                 .requestMatchers(HttpMethod.POST, "/electrics/read-excel").access(isNotUserAccess())
@@ -70,10 +71,13 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.PUT, "/waters").access(isNotUserAccess())
 
                 .requestMatchers(HttpMethod.POST, "/apartments").access(isNotUserAccess())
-                .requestMatchers(HttpMethod.GET, "/apartments").access(isNotUserAccess())
+                .requestMatchers(HttpMethod.GET, "/apartments").permitAll()
                 .requestMatchers(HttpMethod.GET, "/apartments/my-apartments").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.GET, "/apartments/apartment-name").permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/amenities").permitAll()
+
+                .requestMatchers(HttpMethod.POST, "/monthly-invoice/pay/{id}").hasRole(ConstantConfig.USER_ROLE)
 
                 .requestMatchers(HttpMethod.GET, "/buildings").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/buildings").access(isNotUserAccess())
@@ -88,7 +92,10 @@ public class WebSecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/notifications").hasRole(ConstantConfig.ADMIN_ROLE)
                 .requestMatchers(HttpMethod.GET, "/notifications").hasRole(ConstantConfig.ADMIN_ROLE)
                 .requestMatchers(HttpMethod.GET, "/notifications/top-5-notifications").hasRole(ConstantConfig.USER_ROLE)
+                .requestMatchers(HttpMethod.GET, "/notifications/my-notifications").hasRole(ConstantConfig.USER_ROLE)
                 .requestMatchers(HttpMethod.PUT, "/notifications/change-is-read/{notificationId}").hasRole(ConstantConfig.USER_ROLE)
+
+                .requestMatchers(HttpMethod.GET, "/vehicle-invoices/my-invoices").hasRole(ConstantConfig.USER_ROLE)
 
                 .requestMatchers("/data-statistics/**").access(isNotUserAccess())
 

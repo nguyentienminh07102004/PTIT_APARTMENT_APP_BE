@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.DTO.Response.Amenity;
 
-import com.apartmentbuilding.PTIT.Common.Enum.AmenityStatus;
-import com.apartmentbuilding.PTIT.Common.Enum.AmenityType;
+import com.apartmentbuilding.PTIT.Common.Enums.AmenityStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.AmenityType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

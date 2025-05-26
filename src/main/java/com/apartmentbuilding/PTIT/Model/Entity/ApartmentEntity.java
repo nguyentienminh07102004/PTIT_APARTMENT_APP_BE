@@ -51,4 +51,7 @@ public class ApartmentEntity {
 
     @OneToMany(mappedBy = "apartment")
     private List<MonthlyInvoiceEntity> monthlyInvoices;
+
+    @OneToMany(mappedBy = "apartment")
+    private List<RequestEntity> requests;
 }

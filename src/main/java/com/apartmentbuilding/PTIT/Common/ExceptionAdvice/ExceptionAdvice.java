@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Common.ExceptionAdvice;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.DTO.Response.ExceptionResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;

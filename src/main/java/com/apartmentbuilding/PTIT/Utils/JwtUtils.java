@@ -4,7 +4,7 @@ import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
 import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;

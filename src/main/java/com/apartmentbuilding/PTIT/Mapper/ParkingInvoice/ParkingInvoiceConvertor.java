@@ -27,6 +27,7 @@ public class ParkingInvoiceConvertor {
         response.setBillingTime(entity.getMonthlyInvoice().getBillingTime());
         response.setLicensePlate(entity.getVehicle().getLicensePlate());
         response.setType(entity.getVehicle().getType().getName());
+        response.setStatus(entity.getMonthlyInvoice().getStatus());
         return response;
     }
 

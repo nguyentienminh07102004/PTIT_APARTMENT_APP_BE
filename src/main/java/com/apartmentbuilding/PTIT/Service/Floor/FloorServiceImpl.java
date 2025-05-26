@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.Floor;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.Model.Entity.FloorEntity;
 import com.apartmentbuilding.PTIT.Repository.IFloorRepository;

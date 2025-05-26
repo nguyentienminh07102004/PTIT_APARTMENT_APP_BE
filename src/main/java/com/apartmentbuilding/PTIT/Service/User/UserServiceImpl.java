@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Service.User;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.DTO.JwtDTO;
 import com.apartmentbuilding.PTIT.DTO.Request.User.UserChangePasswordRequest;
@@ -12,6 +12,7 @@ import com.apartmentbuilding.PTIT.DTO.Request.User.UserSocialLogin;
 import com.apartmentbuilding.PTIT.DTO.Response.JwtResponse;
 import com.apartmentbuilding.PTIT.DTO.Response.UserResponse;
 import com.apartmentbuilding.PTIT.Mapper.User.IUserMapper;
+import com.apartmentbuilding.PTIT.Mapper.User.UserConvertor;
 import com.apartmentbuilding.PTIT.Model.Entity.JwtEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.UserEntity;
@@ -20,8 +21,8 @@ import com.apartmentbuilding.PTIT.Repository.IJwtRepository;
 import com.apartmentbuilding.PTIT.Repository.IUserRepository;
 import com.apartmentbuilding.PTIT.Service.CodeForgotPassword.ICodeForgotPasswordService;
 import com.apartmentbuilding.PTIT.Service.Role.IRoleService;
-import com.apartmentbuilding.PTIT.Utils.JwtUtils;
 import com.apartmentbuilding.PTIT.Utils.EmailUtils;
+import com.apartmentbuilding.PTIT.Utils.JwtUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +56,7 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final IRoleService roleService;
     private final IJwtRepository jwtRepository;
+    private final UserConvertor userConvertor;
     private final IUserMapper userMapper;
     private final ICodeForgotPasswordService codeForgotPasswordService;
     private final EmailUtils sendEmailUtils;
@@ -142,7 +144,7 @@ public class UserServiceImpl implements IUserService {
     //@Cacheable(cacheNames = "getMyInfo", key = "#authentication.name")
     public UserResponse getMyInfo(Authentication authentication) {
         String email = authentication.getName();
-        return this.userMapper.userEntityToUserResponse(this.getUserByEmail(email));
+        return this.userConvertor.toResponse(this.getUserByEmail(email));
     }
 
     @Override
@@ -198,7 +200,7 @@ public class UserServiceImpl implements IUserService {
         userEntity.setRole(role);
         userEntity.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
         this.userRepository.save(userEntity);
-        return userMapper.userEntityToUserResponse(userEntity);
+        return userConvertor.toResponse(userEntity);
     }
 
     @Override
@@ -243,6 +245,15 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(this.passwordEncoder.encode(userForgotPassword.getNewPassword()));
         user.setJwt(null);
         this.codeForgotPasswordService.deleteCodeForgotPassword(userForgotPassword.getCode());
+        this.userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTokenUser(String email) {
+        UserEntity user = this.getUserByEmail(email);
+        user.getJwt().setUser(null);
+        user.setJwt(null);
         this.userRepository.save(user);
     }
 

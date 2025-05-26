@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.apartmentbuilding.PTIT.Common.Enum.AmenityStatus;
-import com.apartmentbuilding.PTIT.Common.Enum.AmenityType;
+import com.apartmentbuilding.PTIT.Common.Enums.AmenityStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.AmenityType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

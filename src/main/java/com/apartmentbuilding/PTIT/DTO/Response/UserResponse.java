@@ -1,6 +1,5 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
-import com.apartmentbuilding.PTIT.Model.Entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public class UserResponse implements Serializable {
     private String phoneNumber;
     private String identityNumber;
     private Date dateOfBirth;
-    private RoleEntity role;
+    private RoleResponse role;
 
     @Override
     public boolean equals(Object obj) {

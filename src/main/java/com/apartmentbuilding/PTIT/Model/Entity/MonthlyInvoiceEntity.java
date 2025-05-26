@@ -1,6 +1,7 @@
 package com.apartmentbuilding.PTIT.Model.Entity;
 
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentMethod;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentMethod;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -50,10 +51,15 @@ public class MonthlyInvoiceEntity {
     @CreatedDate()
     private Date createdDate;
     @Column()
-    private Date dueDate;
+    @Builder.Default
+    private Date dueDate = new Date(System.currentTimeMillis() + 10 * 24 * 60 * 60 * 1000);
     @Column()
     @Enumerated(value = EnumType.STRING)
     private PaymentMethod paymentMethod;
+    @Column()
+    @Enumerated(value = EnumType.STRING)
+    @Builder.Default
+    private PaymentStatus status = PaymentStatus.UNPAID;
 
     @OneToMany(mappedBy = "monthlyInvoice")
     private List<ParkingInvoiceEntity> packingInvoices;

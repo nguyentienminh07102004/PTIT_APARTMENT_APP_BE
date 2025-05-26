@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

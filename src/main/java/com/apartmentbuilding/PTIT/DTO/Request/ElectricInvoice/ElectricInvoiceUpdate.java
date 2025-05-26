@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice;
 
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

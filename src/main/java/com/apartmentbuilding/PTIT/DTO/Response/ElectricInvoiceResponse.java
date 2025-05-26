@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +20,6 @@ public class ElectricInvoiceResponse {
     private Integer currentNumber;
     private Integer total;
     private Double unitPrice;
-    private Double totalPrice;
     private PaymentStatus status;
+    private Double totalPrice;
 }

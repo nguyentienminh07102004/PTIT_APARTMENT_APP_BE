@@ -10,9 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,5 +40,17 @@ public class MonthlyInvoiceController {
     public ResponseEntity<PagedModel<MonthlyInvoiceResponse>> findMyInvoice(@ModelAttribute MonthInvoiceSearch search) {
         PagedModel<MonthlyInvoiceResponse> invoiceResponses = this.monthlyInvoiceService.findMyInvoice(search);
         return ResponseEntity.status(HttpStatus.OK).body(invoiceResponses);
+    }
+
+    @GetMapping(value = "/invoices-charts")
+    public ResponseEntity<List<MonthlyInvoiceResponse>> findInvoicesChart() {
+        List<MonthlyInvoiceResponse> invoiceResponses = this.monthlyInvoiceService.findInvoicesChart();
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceResponses);
+    }
+
+    @PostMapping(value = "/pay/{id}")
+    public ResponseEntity<MonthlyInvoiceResponse> pay(@PathVariable String id) {
+        MonthlyInvoiceResponse monthlyInvoiceResponse = this.monthlyInvoiceService.pay(id);
+        return ResponseEntity.status(HttpStatus.OK).body(monthlyInvoiceResponse);
     }
 }

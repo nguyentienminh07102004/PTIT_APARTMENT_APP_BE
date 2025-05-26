@@ -22,4 +22,5 @@ public interface IUserService {
     boolean existByIdentityNumber(String identityNumber);
     void sendEmailForgotPassword(String email);
     void verifyCodeForgotPassword(UserForgotPassword userForgotPassword);
+    void deleteTokenUser(String email);
 }

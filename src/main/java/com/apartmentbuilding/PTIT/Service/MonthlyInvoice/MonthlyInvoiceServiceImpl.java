@@ -1,19 +1,22 @@
 package com.apartmentbuilding.PTIT.Service.MonthlyInvoice;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentMethod;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.MonthInvoice.MonthInvoiceSearch;
 import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Mapper.MonthlyInvoice.MonthlyInvoiceConvertor;
+import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity_;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
+import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity_;
+import com.apartmentbuilding.PTIT.Model.Entity.UserEntity_;
 import com.apartmentbuilding.PTIT.Repository.IMonthlyInvoiceRepository;
+import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;
 import com.apartmentbuilding.PTIT.Utils.BillingTimeUtils;
 import com.apartmentbuilding.PTIT.Utils.PaginationUtils;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity_;
-import com.apartmentbuilding.PTIT.Model.Entity.ApartmentEntity_;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,16 +24,18 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
     private final IMonthlyInvoiceRepository monthlyInvoiceRepository;
     private final MonthlyInvoiceConvertor monthlyInvoiceConvertor;
+    private final IApartmentService apartmentService;
 
     @Override
     @Transactional(readOnly = true)
@@ -80,8 +85,14 @@ public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
     @Transactional(readOnly = true)
     public PagedModel<MonthlyInvoiceResponse> findMyInvoice(MonthInvoiceSearch search) {
         Specification<MonthlyInvoiceEntity> specification = (root, query, criteriaBuilder) -> {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
             List<Predicate> predicates = new ArrayList<>();
             String request = search.getSearch();
+            if (!StringUtils.hasText(request)) {
+                return criteriaBuilder.equal(root.get(MonthlyInvoiceEntity_.APARTMENT)
+                        .get(ApartmentEntity_.USER)
+                        .get(UserEntity_.EMAIL), email);
+            }
             if (request.matches("^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[0-2])/([0-9]{4})$\n")) {
                 // tách lấy ngày tháng
                 String[] dateYear = request.split("/");
@@ -92,11 +103,39 @@ public class MonthlyInvoiceServiceImpl implements IMonthlyInvoiceService {
             } else {
                 predicates.add(criteriaBuilder.equal(root.get(MonthlyInvoiceEntity_.APARTMENT).get(ApartmentEntity_.NAME), request));
             }
-            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+            Predicate predicate = criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(MonthlyInvoiceEntity_.APARTMENT)
+                    .get(ApartmentEntity_.USER)
+                    .get(UserEntity_.EMAIL), email));
+            if (query != null) query.distinct(true);
+            return predicate;
         };
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Pageable pageable = PaginationUtils.pagination(search.getPage(), search.getLimit(), Map.of(MonthlyInvoiceEntity_.BILLING_TIME, Sort.Direction.DESC));
-        Page<MonthlyInvoiceEntity> invoiceEntity = this.monthlyInvoiceRepository.findDistinctByApartment_User_Email(email, pageable);
+        Pageable pageable = PaginationUtils.pagination(search.getPage(), search.getLimit(), Sort.by(Sort.Direction.DESC, MonthlyInvoiceEntity_.BILLING_TIME));
+        Page<MonthlyInvoiceEntity> invoiceEntity = this.monthlyInvoiceRepository.findAll(specification, pageable);
         return new PagedModel<>(invoiceEntity.map(this.monthlyInvoiceConvertor::entityToResponse));
+    }
+
+    @Override
+    public List<MonthlyInvoiceResponse> findInvoicesChart() {
+        List<MonthlyInvoiceResponse> responses = new ArrayList<>();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<String> apartmentNames = this.apartmentService.getAllApartmentNameByUserEmail(email);
+        for (String apartmentName: apartmentNames) {
+            List<MonthlyInvoiceEntity> monthlyInvoices = this.monthlyInvoiceRepository.findTop6ByApartment_Name(apartmentName);
+            responses.addAll(monthlyInvoices.stream()
+                    .map(this.monthlyInvoiceConvertor::entityToResponse)
+                    .toList());
+        }
+        return responses;
+    }
+
+    @Override
+    @Transactional
+    public MonthlyInvoiceResponse pay(String id) {
+        MonthlyInvoiceEntity entity = this.findById(id);
+        entity.setPaymentDate(new Date(System.currentTimeMillis()));
+        entity.setPaymentMethod(PaymentMethod.CAST);
+        this.monthlyInvoiceRepository.save(entity);
+        return this.monthlyInvoiceConvertor.entityToResponse(entity);
     }
 }

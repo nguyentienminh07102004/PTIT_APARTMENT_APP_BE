@@ -45,8 +45,17 @@ public class NotificationController {
 
     @GetMapping()
     public ResponseEntity<PagedModel<NotificationResponse>> findAll(@RequestParam(required = false) Integer page,
-                                                                    @RequestParam(required = false) Integer limit) {
-        PagedModel<NotificationResponse> notifications = this.notificationService.findAll(page, limit);
+                                                                    @RequestParam(required = false) Integer limit,
+                                                                    @RequestParam(required = false, name = "query") String search) {
+        PagedModel<NotificationResponse> notifications = this.notificationService.findAll(search, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(notifications);
+    }
+
+    @GetMapping(value = "/my-notifications")
+    public ResponseEntity<PagedModel<NotificationUserResponse>> findMyNotification(@RequestParam(required = false) Integer page,
+                                                                                   @RequestParam(required = false) Integer limit,
+                                                                                   @RequestParam(required = false, name = "query") String search) {
+        PagedModel<NotificationUserResponse> notifications = this.notificationService.findAllNotificationUsers(search, page, limit);
+        return ResponseEntity.status(200).body(notifications);
     }
 }

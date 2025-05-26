@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Utils;
 
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 
 import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.ELECTRIC_TYPE;
 import static com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig.VEHICLE_TYPE;

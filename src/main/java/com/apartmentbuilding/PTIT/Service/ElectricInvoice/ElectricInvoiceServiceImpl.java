@@ -1,7 +1,7 @@
 package com.apartmentbuilding.PTIT.Service.ElectricInvoice;
 
 import com.apartmentbuilding.PTIT.Common.Beans.ConstantConfig;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice.ElectricInvoiceRequest;
 import com.apartmentbuilding.PTIT.DTO.Request.ElectricInvoice.ElectricInvoiceSearch;
@@ -15,6 +15,7 @@ import com.apartmentbuilding.PTIT.Model.Entity.ElectricInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.ElectricInvoiceEntity_;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity_;
+import com.apartmentbuilding.PTIT.Model.Entity.UserEntity_;
 import com.apartmentbuilding.PTIT.Repository.IElectricRepository;
 import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;
 import com.apartmentbuilding.PTIT.Service.MonthlyInvoice.IMonthlyInvoiceService;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -70,7 +72,6 @@ public class ElectricInvoiceServiceImpl implements IElectricInvoiceService {
         ElectricInvoiceEntity invoice = this.findById(invoiceUpdate.getId());
         invoice.setCurrentNumber(invoiceUpdate.getCurrentNumber());
         invoice.setUnitPrice(invoiceUpdate.getUnitPrice());
-        invoice.setStatus(invoiceUpdate.getStatus());
         this.electricRepository.save(invoice);
         return this.electricConvertor.entityToResponse(invoice);
     }
@@ -101,16 +102,15 @@ public class ElectricInvoiceServiceImpl implements IElectricInvoiceService {
     public PagedModel<ElectricInvoiceResponse> findElectricInvoice(String search, Integer page, Integer limit) {
         Pageable pageable = PaginationUtils.pagination(page, limit);
         Specification<ElectricInvoiceEntity> specification = (root, query, criteriaBuilder) -> {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
             if (!StringUtils.hasText(search)) {
-                return criteriaBuilder.conjunction();
+                return criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
+                        .get(MonthlyInvoiceEntity_.APARTMENT)
+                        .get(ApartmentEntity_.USER)
+                        .get(UserEntity_.EMAIL), email);
             }
             List<Predicate> predicates = new ArrayList<>();
-            if (search.matches("^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[0-2])/([0-9]{4})$\n")) {
-                // tách lấy ngày tháng
-                String[] dateYear = search.split("/");
-                predicates.add(criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
-                        .get(MonthlyInvoiceEntity_.BILLING_TIME), String.join("/", dateYear[1], dateYear[2])));
-            } else if (BillingTimeUtils.isBillingTime(search)) {
+            if (BillingTimeUtils.isBillingTime(search)) {
                 predicates.add(criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
                         .get(MonthlyInvoiceEntity_.BILLING_TIME), search));
             } else {
@@ -119,9 +119,15 @@ public class ElectricInvoiceServiceImpl implements IElectricInvoiceService {
                         .get(ApartmentEntity_.NAME), "%" + search + "%"));
             }
             if (query != null) {
-                query.distinct(true);
+//                query.distinct(true);
+                query.orderBy(criteriaBuilder.desc(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE).get(MonthlyInvoiceEntity_.BILLING_TIME)));
             }
-            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+            Predicate predicate = criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(ElectricInvoiceEntity_.MONTHLY_INVOICE)
+                    .get(MonthlyInvoiceEntity_.APARTMENT)
+                    .get(ApartmentEntity_.USER)
+                    .get(UserEntity_.EMAIL), email));
+            return predicate;
         };
         return new PagedModel<>(this.electricRepository.findAll(specification, pageable)
                 .map(this.electricConvertor::entityToResponse));

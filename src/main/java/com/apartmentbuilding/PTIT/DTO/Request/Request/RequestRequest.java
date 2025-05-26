@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Request.Request;
 
-import com.apartmentbuilding.PTIT.Common.Enum.RequestType;
+import com.apartmentbuilding.PTIT.Common.Enums.RequestType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +15,6 @@ import lombok.Setter;
 public class RequestRequest {
     private String content;
     private String title;
-    private String apartmentId;
+    private String apartmentName;
     private RequestType type;
 }

@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.Firebase;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.Firebase.FirebaseMessageRequest;
 import com.google.firebase.FirebaseApp;

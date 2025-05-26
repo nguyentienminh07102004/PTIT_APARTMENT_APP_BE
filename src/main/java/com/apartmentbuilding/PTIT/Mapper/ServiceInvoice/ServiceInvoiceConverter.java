@@ -13,6 +13,7 @@ public class ServiceInvoiceConverter {
     public ServiceInvoiceResponse toResponse(ServiceInvoiceEntity serviceInvoiceEntity) {
         ServiceInvoiceResponse serviceInvoiceResponse = this.serviceInvoiceMapper.toResponse(serviceInvoiceEntity);
         serviceInvoiceResponse.setApartmentName(serviceInvoiceEntity.getMonthlyInvoice().getApartment().getName());
+        serviceInvoiceResponse.setStatus(serviceInvoiceEntity.getMonthlyInvoice().getStatus());
         return serviceInvoiceResponse;
     }
 }

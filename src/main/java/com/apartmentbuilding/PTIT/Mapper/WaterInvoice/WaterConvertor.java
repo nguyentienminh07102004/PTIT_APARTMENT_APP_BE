@@ -25,6 +25,7 @@ public class WaterConvertor {
         response.setTotal(response.getCurrentNumber() - response.getBeforeNumber());
         response.setBillingTime(entity.getMonthlyInvoice().getBillingTime());
         response.setTotalPrice(response.getTotal() * response.getUnitPrice());
+        response.setStatus(entity.getMonthlyInvoice().getStatus());
         return response;
     }
 }

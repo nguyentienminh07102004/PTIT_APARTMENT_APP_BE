@@ -15,5 +15,6 @@ public interface IWaterInvoiceService {
     List<WaterInvoiceResponse> saveFromExcel(MultipartFile file);
     WaterInvoiceEntity findById(String id);
     PagedModel<WaterInvoiceResponse> findWaterInvoice(WaterInvoiceSearchRequest search);
+    PagedModel<WaterInvoiceResponse> findMyWaterInvoice(String search, Integer page, Integer limit);
     WaterInvoiceResponse updateWaterInvoice(WaterInvoiceUpdate request);
 }

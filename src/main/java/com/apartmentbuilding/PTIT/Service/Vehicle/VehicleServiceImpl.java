@@ -1,8 +1,8 @@
 package com.apartmentbuilding.PTIT.Service.Vehicle;
 
-import com.apartmentbuilding.PTIT.Common.Enum.VehicleStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.VehicleStatus;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.DTO.Request.Vehicle.VehicleCreate;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleEntity;
 import com.apartmentbuilding.PTIT.Model.Entity.VehicleTypeEntity;
@@ -10,8 +10,11 @@ import com.apartmentbuilding.PTIT.Repository.IVehicleRepository;
 import com.apartmentbuilding.PTIT.Service.Apartment.IApartmentService;
 import com.apartmentbuilding.PTIT.Service.VehicleType.IVehicleTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +40,8 @@ public class VehicleServiceImpl implements IVehicleService {
     @Override
     @Transactional
     public VehicleEntity create(VehicleCreate create) {
-        VehicleEntity vehicleEntity = this.findByLicensePlate(create.getLicensePlate());
-        if (vehicleEntity != null) {
+        Boolean isExists = this.vehicleRepository.existsByLicensePlate(create.getLicensePlate());
+        if (isExists) {
             throw new DataInvalidException(ExceptionVariable.LICENSE_PLATE_HAS_EXISTS);
         }
         VehicleEntity vehicle = new VehicleEntity();
@@ -49,5 +52,18 @@ public class VehicleServiceImpl implements IVehicleService {
         vehicle.setApartment(this.apartmentService.findByName(create.getApartmentName()));
         this.vehicleRepository.save(vehicle);
         return vehicle;
+    }
+
+    @Override
+    @Transactional
+    public void delete(List<String> ids) {
+        for (String id : ids) {
+            VehicleEntity vehicle = this.findById(id);
+            if (!vehicle.getApartment().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                throw new DataInvalidException(ExceptionVariable.VEHICLE_NOT_FOUND);
+            }
+            vehicle.setStatus(vehicle.getStatus().equals(VehicleStatus.ACTIVE) ? VehicleStatus.INACTIVE : VehicleStatus.ACTIVE);
+            this.vehicleRepository.save(vehicle);
+        }
     }
 }

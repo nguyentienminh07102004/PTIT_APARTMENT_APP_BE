@@ -1,7 +1,6 @@
 package com.apartmentbuilding.PTIT.Service.ServiceInvoice;
 
-import com.apartmentbuilding.PTIT.Common.Enum.ExceptionVariable;
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.ExceptionVariable;
 import com.apartmentbuilding.PTIT.Common.ExceptionAdvice.DataInvalidException;
 import com.apartmentbuilding.PTIT.DTO.Request.ServiceInvoice.ServiceInvoiceRequest;
 import com.apartmentbuilding.PTIT.DTO.Response.ServiceInvoiceResponse;
@@ -38,7 +37,6 @@ public class ServiceInvoiceServiceImpl implements IServiceInvoiceService {
         ServiceInvoiceEntity entity = new ServiceInvoiceEntity();
         ApartmentEntity apartment = this.apartmentService.findByName(request.getApartmentName());
         MonthlyInvoiceEntity monthlyInvoice = this.monthlyInvoiceService.findByBillingTimeAndApartment_Name(request.getBillingTime(), request.getApartmentName());
-        entity.setStatus(PaymentStatus.UNPAID);
         ServiceTypeEntity serviceTypeEntity = this.serviceType.findByName(request.getTypeName());
         entity.setUnitPrice(serviceTypeEntity.getUnitPrice());
         entity.setType(serviceTypeEntity);

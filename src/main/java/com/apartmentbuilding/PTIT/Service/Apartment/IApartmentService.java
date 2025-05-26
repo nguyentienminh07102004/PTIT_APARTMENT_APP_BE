@@ -22,5 +22,7 @@ public interface IApartmentService {
 
     List<ApartmentResponse> findMyApartment();
 
-    Long countApartment();
+    List<String> getAllApartmentNames();
+
+    List<String> getAllApartmentNameByUserEmail(String email);
 }

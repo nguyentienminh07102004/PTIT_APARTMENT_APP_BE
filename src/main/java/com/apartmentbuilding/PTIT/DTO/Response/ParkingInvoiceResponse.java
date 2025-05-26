@@ -1,6 +1,6 @@
 package com.apartmentbuilding.PTIT.DTO.Response;
 
-import com.apartmentbuilding.PTIT.Common.Enum.PaymentStatus;
+import com.apartmentbuilding.PTIT.Common.Enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +18,6 @@ public class ParkingInvoiceResponse {
     private Double unitPrice;
     private String apartmentName;
     private String billingTime;
-    private PaymentStatus status;
     private String type;
+    private PaymentStatus status;
 }

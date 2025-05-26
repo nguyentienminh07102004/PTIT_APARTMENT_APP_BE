@@ -1,4 +1,4 @@
-package com.apartmentbuilding.PTIT.Common.Enum;
+package com.apartmentbuilding.PTIT.Common.Enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,7 +50,7 @@ public enum ExceptionVariable {
     WATER_INVOICE_NOT_FOUND(404, "Water invoice not found", HttpStatus.NOT_FOUND),
 
     CODE_NOT_NULL_OR_EMPTY(400, "Code is not null or empty", HttpStatus.BAD_REQUEST),
-    CODE_INVALID(400, "Code is invalid", HttpStatus.BAD_REQUEST ),
+    CODE_INVALID(400, "Code is invalid", HttpStatus.BAD_REQUEST),
 
     BUILDING_NOT_FOUND(404, "Building not found", HttpStatus.NOT_FOUND),
 

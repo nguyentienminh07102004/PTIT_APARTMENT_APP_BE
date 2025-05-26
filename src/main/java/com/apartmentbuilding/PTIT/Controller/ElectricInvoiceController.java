@@ -47,7 +47,7 @@ public class ElectricInvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(invoiceResponse);
     }
 
-    @GetMapping(value = "/search-all")
+    @GetMapping(value = "/my-invoices")
     public ResponseEntity<PagedModel<ElectricInvoiceResponse>> findElectricInvoice(@RequestParam(required = false) String search,
                                                                                    @RequestParam(required = false, defaultValue = "1") Integer page,
                                                                                    @RequestParam(required = false, defaultValue = "10") Integer limit) {

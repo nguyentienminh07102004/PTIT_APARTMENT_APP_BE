@@ -5,6 +5,8 @@ import com.apartmentbuilding.PTIT.DTO.Response.MonthlyInvoiceResponse;
 import com.apartmentbuilding.PTIT.Model.Entity.MonthlyInvoiceEntity;
 import org.springframework.data.web.PagedModel;
 
+import java.util.List;
+
 public interface IMonthlyInvoiceService {
     boolean existsById(String id);
 
@@ -21,4 +23,7 @@ public interface IMonthlyInvoiceService {
     PagedModel<MonthlyInvoiceResponse> findByApartment_Name(String apartmentName, Integer page, Integer limit);
 
     PagedModel<MonthlyInvoiceResponse> findMyInvoice(MonthInvoiceSearch search);
+
+    List<MonthlyInvoiceResponse> findInvoicesChart();
+    MonthlyInvoiceResponse pay(String id);
 }

@@ -49,4 +49,10 @@ public class ApartmentController {
         List<ApartmentResponse> myApartments = this.apartmentService.findMyApartment();
         return ResponseEntity.status(HttpStatus.OK).body(myApartments);
     }
+
+    @GetMapping(value = "/apartment-name")
+    public ResponseEntity<List<String>> getAllApartmentNames() {
+        List<String> apartmentNames = this.apartmentService.getAllApartmentNames();
+        return ResponseEntity.status(HttpStatus.OK).body(apartmentNames);
+    }
 }
